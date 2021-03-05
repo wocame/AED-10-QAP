@@ -40,8 +40,8 @@ def gerarEntradaAleatoria(n):
 # Saídas:
 # - Fator de influencia na escolha da rota de acordo com a chance de ataque
 def f(R, i, j, k, p):
-    if k - p == 1:
-        return 1 / (R[j] * k)
+    if p - k == 1:
+        return 1 / (R[j] * p)
     else:
         return 0
 
@@ -118,6 +118,22 @@ def preparaEntrada(n, G, R):
 
     return D, F
 
+
+# Converte a matriz de permutação em uma rota mais facil de visualizar
+# Entrada:
+# - n: Número de dependências
+# - X: Matriz de permutação com rota
+# Saidas:
+# - String no formato "Dep1 -> Dep2 -> ... -> DepN"
+def mostrarRota(n, X):
+    rota = ""
+    for j in range(n):
+        for i in range(n):
+            if X[i][j] == 1: rota += str(i)+" "
+        rota += "-> "
+    for i in range(n):
+        if X[i][0] == 1: rota += str(i)+" "
+    return rota
 
 # Smoke test
 # n = 3

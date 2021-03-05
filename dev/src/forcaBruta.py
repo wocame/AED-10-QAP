@@ -3,7 +3,7 @@
 # Imports #####################################################
 
 import numpy
-import utilidades
+import src.utilidades as util
 from itertools import permutations
 
 # Imports #####################################################
@@ -23,7 +23,7 @@ def forcaBruta(n, D, F):
     # Calculo do fator de escolha de acordo com cada permutação
     custo_ponderado = []
     for X in permutacao:
-        fator_escolha = utilidades.calculoFatorEscolha(n, D, F, X)
+        fator_escolha = util.calculoFatorEscolha(n, D, F, X)
         custo_ponderado = numpy.append(custo_ponderado, [fator_escolha])
 
     # Retorna matriz de escolha ótima

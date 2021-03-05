@@ -3,7 +3,6 @@
 # Imports #####################################################
 
 import numpy
-import geopy.distance
 from geopy.distance import geodesic
 
 

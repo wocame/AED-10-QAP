@@ -2,11 +2,13 @@
 
 # Imports #####################################################
 
+
 import numpy
 import src.utilidades as util
 from itertools import permutations
 
-# Imports #####################################################
+
+# Methods #####################################################
 
 
 # Algoritmo Força Bruta para calcular QAP

@@ -15,7 +15,7 @@ from itertools import permutations
 # - F: Matriz (n por n por n por n) de fator de risco
 # Saídas:
 # - X: Matriz de escolha com rota ótima
-def forcaBruta(n, D, F):
+def forca_bruta(n, D, F):
 
     # Gera todas as possiveis permutações x
     permutacao = [numpy.array(perm) for perm in permutations(numpy.identity(n))]
@@ -23,7 +23,7 @@ def forcaBruta(n, D, F):
     # Calculo do fator de escolha de acordo com cada permutação
     custo_ponderado = []
     for X in permutacao:
-        fator_escolha = util.calculoFatorEscolha(n, D, F, X)
+        fator_escolha = util.calculo_fator_escolha(n, D, F, X)
         custo_ponderado = numpy.append(custo_ponderado, [fator_escolha])
 
     # Retorna matriz de escolha ótima

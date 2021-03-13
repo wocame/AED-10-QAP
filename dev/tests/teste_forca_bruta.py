@@ -6,22 +6,22 @@ import matplotlib.pyplot as plt
 import time
 import numpy
 import src.utilidades as util
-from src.forcaBruta import forcaBruta
+from src.forca_bruta import forca_bruta
 
 
 # Methods #####################################################
 
-def testForcaBruta(n, repeticoes, debug=0):
+def teste_forca_bruta(n, repeticoes, debug=0):
     if (debug): print("")
     if (debug): print("Número de dependências:", n)
     if (debug): print("")
     if (debug): print("Gerando entradas aleatórias...")
-    G, R = util.gerarEntradaAleatoria(n)
+    G, R = util.gerar_entrada_aleatoria(n)
     if (debug): print("Matriz de coordenadas (G):", [cord for cord in G])
     if (debug): print("Fator de risco (R):", R)
     if (debug): print("")
     if (debug): print("Processando entradas...")
-    D, F = util.preparaEntrada(n, G, R)
+    D, F = util.prepara_entrada(n, G, R)
     if (debug): print("Custo de deslocamento (D):")
     if (debug): print(D)
     if (debug): print("Fator de risco (F):")
@@ -29,12 +29,12 @@ def testForcaBruta(n, repeticoes, debug=0):
 
     if (debug): print("")
     if (debug): print("Rodando Forca Bruta", repeticoes, "vezes...")
-    return numpy.array([rodarAlgoritmo(n, D, F, debug) for i in range(repeticoes)])
+    return numpy.array([rodar_algoritmo(n, D, F, debug) for i in range(repeticoes)])
 
 
-def rodarAlgoritmo(n, D, F, debug):
+def rodar_algoritmo(n, D, F, debug):
     start = time.process_time()
-    X = forcaBruta(n, D, F)
+    X = forca_bruta(n, D, F)
     tim_custo = time.process_time() - start
 
     if (debug): print("-> Tempo da rodada:", tim_custo, "segundos")
@@ -55,7 +55,7 @@ test_n = list(range(min_deps, max_deps + 1))
 for n in test_n:
     print("")
     print(f'Executando com n={n}...')
-    tempos = testForcaBruta(n, repeticoes, debug)
+    tempos = teste_forca_bruta(n, repeticoes, debug)
 
     media[n] = tempos.mean()
     desvp[n] = tempos.std()

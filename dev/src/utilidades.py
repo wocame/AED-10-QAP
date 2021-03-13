@@ -14,7 +14,7 @@ from geopy.distance import geodesic
 # Saídas:
 # - G: Matriz de coordenadas geográficas
 # - R: Matriz de Risco das entidades
-def gerarEntradaAleatoria(n):
+def gerar_entrada_aleatoria(n):
     # Geração de coordenadas geográficas aleatórias para as n dependências
     # Cada indice representa a coordenada da respectiva dependência
     latitude = numpy.random.randint(-90, 90, n)
@@ -54,7 +54,7 @@ def f(R, i, j, k, p):
 # - X: Matriz de permutação (rota)
 # Saídas:
 # - Fator de escolha
-def calculoFatorEscolha (n, D, F, X) :
+def calculo_fator_escolha (n, D, F, X) :
     fator_escolha = 0
     for i in range(n):
         for j in range(n):
@@ -72,7 +72,7 @@ def calculoFatorEscolha (n, D, F, X) :
 # - X: Matriz de permutação (rota)
 # Saídas:
 # - Custo de logistica
-def calculoCustoLogistica (n, D, X) :
+def calculo_custo_logistica (n, D, X) :
     custo_logistica = 0
     for i in range(n):
         for j in range(n):
@@ -90,7 +90,7 @@ def calculoCustoLogistica (n, D, X) :
 # Saídas:
 # - D: Matriz de Custo de Deslocamento entre entidades (n por n)
 # - F: Matriz de Fator de Risco (n por n por n por n)
-def preparaEntrada(n, G, R):
+def prepara_entrada(n, G, R):
 
     # V: Custo médio por quilômetro
     V = 10
@@ -124,7 +124,7 @@ def preparaEntrada(n, G, R):
 # - X: Matriz de permutação com rota
 # Saidas:
 # - String no formato "Dep1 -> Dep2 -> ... -> DepN"
-def mostrarRota(n, X):
+def mostrar_rota(n, X):
     rota = ""
     for j in range(n):
         for i in range(n):
@@ -136,12 +136,12 @@ def mostrarRota(n, X):
 
 # Smoke test
 # n = 3
-# G, R = gerarEntradaAleatoria(n)
+# G, R = gerar_entrada_aleatoria(n)
 # print("Coordenadas geográficas:")
 # print(G)
 # print("Risco:")
 # print(R)
-# D, F = preparaEntrada(n, G, R)
+# D, F = prepara_entrada(n, G, R)
 # print("Custo de deslocamento:")
 # print(D)
 # print("Fator de risco:")

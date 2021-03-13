@@ -8,6 +8,7 @@ from itertools import permutations
 
 # Imports #####################################################
 
+
 # Algoritmo Força Bruta para calcular QAP
 # Entradas:
 # - n: Número de dependências

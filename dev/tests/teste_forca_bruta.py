@@ -11,6 +11,7 @@ from src.forca_bruta import forca_bruta
 
 # Methods #####################################################
 
+
 def teste_forca_bruta(n, repeticoes, debug=0):
     if (debug): print("")
     if (debug): print("Número de dependências:", n)

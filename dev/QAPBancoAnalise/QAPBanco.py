@@ -283,3 +283,21 @@ class QAPBanco:
         else:
             return 0
 
+    def __copy__(self):
+        obj = QAPBanco()
+        obj.n = self.n
+        obj.V = self.V
+        obj.f = self.f
+        obj.id = self.id
+        obj.G = self.G
+        obj.R = self.R
+        obj.__n = self.__n
+        obj.__V = self.__V
+        obj.__f = self.__f
+        obj.__G = self.__G
+        obj.__R = self.__R
+        obj.__D = self.__D
+        obj.__F = self.__F
+        obj.__X = self.__X
+        obj.__tempo_exec = self.__tempo_exec
+        return obj

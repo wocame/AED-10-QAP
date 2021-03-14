@@ -11,35 +11,20 @@ class QAPBanco:
     """
     Problema de Assinalamento Quadrático de manutenção de segurança do banco
     :param n: Número de dependências do problema
-    :type n: int
     :param V: Custo médio em reais por quilômetro, defaults to 10
-    :type V: float
     :param f: Função de fator de risco, defaults to __fator_risco
-    :type f:  function(int,int,int,int)->float
-    :param id: Identificação das dependências
-    :type id: list de strings com shape=(n,)
-    :param G: Matriz de coordenadas geográficas das entidades
-    :type G: list de tuplas (float,float) com shape=(n,)
-    :param R: Matriz de Risco das entidades
-    :type R: list de ints de 1 a 6 com shape=(n,)
+    :param id: Identificação das dependências com shape=(n,)
+    :param G: Matriz de coordenadas geográficas das entidades com shape=(n,)
+    :param R: Matriz de Risco das entidades com shape=(n,)
     :param __n: Valor do atributo n usado no calculo das matrizes __D e __F
-    :type __n: int
     :param __V: Valor do atributo V usado no calculo das matrizes __D e __F
-    :type __V: float
     :param __f: Função f usada no calculo das matrizes __D e __F
-    :type __f:  function(int,int,int,int)->float
     :param __G: Valor do atributo G usado no calculo das matrizes __D e __F
-    :type __G: list de floats com shape=(n,)
     :param __R: Valor do atributo R usado no calculo das matrizes __D e __F
-    :type __R: list de ints de 1 a 6 com shape=(n,)
     :param __D: Matriz de Custo de Deslocamento entre entidades
-    :type __D: list de floats com shape=(n,n)
     :param __F: Matriz de Fator de Risco com todas as combinações possíveis
-    :type __F: list de floats com shape=(n,n,n,n)
     :param __X: Matriz de solução (rota) do problema
-    :type __X: list de booleanos com shape=(n,n)
     :param __tempo_exec: Tempo de execução em segundos do ultimo algoritmo usado para solucionar o problema
-    :type __tempo_exec: float
     """
 
     def __init__(self, df=None):
@@ -50,7 +35,6 @@ class QAPBanco:
             '-> Col 2: Latitude
             '-> Col 3: Longitude
             '-> Col 4: Risco
-        :type df: class:`pandas.Dataframe` com shape=(n,4)
         """
 
         # Valores padrão
@@ -77,12 +61,11 @@ class QAPBanco:
     def registrar_dependencias(self, df: pd.DataFrame):
         """
         Registra as informações das dependêcias nessa QAP
-        :param df: Informações das dependências
+        :param df: Dataframe com informações das dependências
             '-> Col 1: Identificador
             '-> Col 2: Latitude
             '-> Col 3: Longitude
             '-> Col 4: Risco
-        :type df: class:`pandas.Dataframe` com shape=(n,4)
         :raises: class:`TypeError`: Dataframe entrada não está no formato correto
         """
 
@@ -103,22 +86,26 @@ class QAPBanco:
     def resgatar_dependencias(self):
         """
         Resgata dados registrados das dependências
-        :returns: Informações das dependências
+        :returns: Dataframe com informações das dependências
             '-> 'id':    Identificador
             '-> 'lat':   Latitude
             '-> 'lon':   Longitude
             '-> 'risco': Risco
-        :rtype: class:`pandas.DataFrame`
         """
         return pd.DataFrame({'id': self.id, 'lat': self.G[:, 0], 'lon': self.G[:, 1], 'risco': self.R})
+
+    def num_dependencias(self):
+        """
+        Informa o número de dependencias do problema resolvido
+        :returns: Número de dependencias
+        """
+        return self.n
 
     def resolver_com(self, alg):
         """
         Soluciona o problema com o algoritmo fornecido
         :param alg: Função que implementa um algoritmo
-        :type alg: function(
-        :returns: Matriz da rota que soluciona o problema (ou None se não tiver sido solucionada)
-        :rtype: class:`numpy.array com shape=(n,n)`
+        :returns: Matriz da rota que soluciona o problema com shape=(n,n) (ou None se não tiver sido solucionada)
         """
         inicio = time.process_time()
         self.__X = alg(self.n, self.__D, self.__F)
@@ -127,8 +114,7 @@ class QAPBanco:
     def solucao(self):
         """
         Informa a soluçao do problema
-        :returns: Matriz da rota que soluciona o problema (ou None se não tiver sido solucionada)
-        :rtype: class:`numpy.array com shape=(n,n)`
+        :returns: Matriz da rota que soluciona o problema com shape=(n,n) (ou None se não tiver sido solucionada)
         """
         return self.__X
 
@@ -136,28 +122,26 @@ class QAPBanco:
         """
         Converte a matriz de solucao em uma rota mais facil de visualizar
         :param n: Número de dependências do problema
-        :type n: int
-        :param X: Matriz da rota a ser convertida em rota
-        :type X: numpy.array com shape=(n,n)
+        :param X: Matriz da rota a ser convertida em rota com shape=(n,n)
         :returns: Rota no formato "Dep1 -> Dep2 -> ... -> DepN -> Dep1"
-        :rtype: str
         """
 
-        rota = ""
         if self.__X is not None:
+            rota = ""
             for j in range(self.__n):
                 for i in range(self.__n):
                     if self.__X[i][j] == 1: rota += self.id[i] + " "
                 rota += "-> "
             for i in range(self.__n):
                 if self.__X[i][0] == 1: rota += self.id[i] + " "
+        else:
+            rota = "<Não resolvido>"
         return rota
 
     def fator_escolha(self):
         """
         Fator de escolha (custo ponderado com risco) da rota da solução
         :returns: Fator de escolha
-        :rtype: float
         """
         return QAPBanco.calculo_fator_escolha(self.__n, self.__D, self.__F, self.__X)
 
@@ -165,7 +149,6 @@ class QAPBanco:
         """
         Custo da logística da rota da solução
         :returns: Custo logístico
-        :rtype: float
         """
         return QAPBanco.calculo_custo_logistica(self.__n, self.__D, self.__X)
 
@@ -173,7 +156,6 @@ class QAPBanco:
         """
         Tempo de execução da ultima resolução do problema
         :returns: Tempo de execução em segundos
-        :rtype: float
         """
         return self.__tempo_exec
 
@@ -182,15 +164,10 @@ class QAPBanco:
         """
         Fator de escolha (custo ponderado com risco) da rota fornecida
         :param n: Número de dependências do problema
-        :type n: int
-        :param D: Matriz de custo de deslocamento
-        :type D: numpy.array com shape=(n,n)
-        :param F: Matriz de Fator de Risco com todas as combinações possíveis
-        :type F: numpy.array com shape=(n,n,n,n)
-        :param X: Matriz da rota a ser avaliada
-        :type X: numpy.array com shape=(n,n)
+        :param D: Matriz de custo de deslocamento com shape=(n,n)
+        :param F: Matriz de Fator de Risco com todas as combinações possíveis com shape=(n,n,n,n)
+        :param X: Matriz da rota a ser avaliada com shape=(n,n)
         :returns: Fator de escolha
-        :rtype: float
         """
         fator_escolha = 0
         for i in range(n):
@@ -205,13 +182,9 @@ class QAPBanco:
         """
         Custo da logística da rota fornecida
         :param n: Número de dependências do problema
-        :type n: int
-        :param D: Matriz de custo de deslocamento
-        :type D: numpy.array com shape=(n,n)
-        :param X: Matriz da rota a ser avaliada
-        :type X: numpy.array com shape=(n,n)
+        :param D: Matriz de custo de deslocamento com shape=(n,n)
+        :param X: Matriz da rota a ser avaliada com shape=(n,n)
         :returns: Custo logístico
-        :rtype: float
         """
         custo_logistica = 0
         for i in range(n):
@@ -220,7 +193,6 @@ class QAPBanco:
                     for p in range(n):
                         custo_logistica += D[i][j] * X[i][k] * X[j][p]
         return custo_logistica
-
 
     # Métodos privados ########################################
 
@@ -268,15 +240,10 @@ class QAPBanco:
         Calcula a influencia na escolha do trajeto devido a chance de ataque entre dependências
         em determinadas posições da rota
         :param i: indice da dependência de origem
-        :type i: int
         :param j: indice da dependência de destino
-        :type j: int
         :param k: posição da rota de origem
-        :type k: int
         :param p: posição da rota de destino
-        :type p: int
         :returns: Fator de risco
-        :rtype: float
         """
         if p - k == 1:
             return 1 / (self.R[j] * p)
@@ -301,3 +268,9 @@ class QAPBanco:
         obj.__X = self.__X
         obj.__tempo_exec = self.__tempo_exec
         return obj
+
+    def __str__(self):
+        string = "QAPBanco:\n"
+        string += str(self.resgatar_dependencias()) + '\n'
+        string += "Solucao: " + self.rota_solucao()
+        return string

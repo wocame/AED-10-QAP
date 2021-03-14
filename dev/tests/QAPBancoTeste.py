@@ -58,7 +58,7 @@ class QAPBancoTeste:
             self.__qap_solucionado.append(copy(self.__qap))
             self.__tempos.append(self.__qap.tempo_execucao())
 
-    def resolvido(self):
+    def problema_resolvido(self):
         """
         Informa a(s) soluçao(ões) do problema
         :returns: Problema(s) solucionados
@@ -66,13 +66,21 @@ class QAPBancoTeste:
         """
         return self.__qap_solucionado
 
+    def rota_resolvido(self):
+        """
+        Informa a(s) rota(s) da solucao do problema
+        :returns: Rota(s) encontradas
+        :rtype: list
+        """
+        return [qap.rota_solucao() for qap in self.__qap_solucionado]
+
     def tempo_resolvido(self):
         """
         Informa tempo(s) de execução do ultimo teste rodado
         :return: Tempo(s) da ultima execução em segundos
         :rtype: list
         """
-        return np.array(self.__tempos)
+        return self.__tempos
 
     def tempo_medio(self):
         """
@@ -80,7 +88,7 @@ class QAPBancoTeste:
         :return: Tempo médio de execução em segundos
         :rtype: float
         """
-        return self.__tempos.mean()
+        return np.array(self.__tempos).mean()
 
     def tempo_desvio(self):
         """
@@ -88,4 +96,4 @@ class QAPBancoTeste:
         :return: Desvio padrão em segundos
         :rtype: float
         """
-        return self.__tempos.std()
+        return np.array(self.__tempos).std()

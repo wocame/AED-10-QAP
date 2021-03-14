@@ -2,7 +2,7 @@
 
 # Imports
 import numpy as np
-from QAPBancoAnalise.QAPBanco import QAPBanco
+from QAPBanco.QAPBanco import QAPBanco
 from copy import copy
 
 

@@ -3,11 +3,11 @@
 # Imports #####################################################
 
 import matplotlib.pyplot as plt
-import QAPBancoAnalise.utilidades as util
-from QAPBancoAnalise.QAPBanco import QAPBanco
-from tests.QAPBancoTeste import QAPBancoTeste
-from tests.QAPBancoSuite import QAPBancoSuite
-from QAPBancoAnalise.forca_bruta import forca_bruta
+import QAPBanco.utilidades as util
+from QAPBanco.QAPBanco import QAPBanco
+from QAPBancoAnalise.QAPBancoTeste import QAPBancoTeste
+from QAPBancoAnalise.QAPBancoSuite import QAPBancoSuite
+from Algoritmo.forca_bruta import forca_bruta
 
 # Configurações ###############################################
 

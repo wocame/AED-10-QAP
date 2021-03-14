@@ -2,7 +2,7 @@
 
 # Imports
 import numpy
-from QAPBancoAnalise.QAPBanco import QAPBanco
+from QAPBanco.QAPBanco import QAPBanco
 from itertools import permutations
 
 # Algoritmo

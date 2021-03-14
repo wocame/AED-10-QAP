@@ -1,24 +1,23 @@
 # -*- coding: utf-8 -*-
 
-# Imports #####################################################
-
-
+# Imports
 import numpy
-import src.utilidades as util
+from src.QAPBanco import QAPBanco
 from itertools import permutations
 
-
-# Methods #####################################################
-
-
-# Algoritmo Força Bruta para calcular QAP
-# Entradas:
-# - n: Número de dependências
-# - D: Matriz (n por n) de custo de deslocamento entre dependências
-# - F: Matriz (n por n por n por n) de fator de risco
-# Saídas:
-# - X: Matriz de escolha com rota ótima
+# Algoritmo
 def forca_bruta(n, D, F):
+    """
+    Algoritmo Força Bruta para calcular QAP do banco
+    :param n: Número de dependências
+    :type n: int
+    :param D: Matriz de custo de deslocamento entre dependências
+    :type D: class:`numpy.array` com shape=(n,n)
+    :param F: Matriz de fator de risco
+    :type F: class:`numpy.array` com shape=(n,n,n,n)
+    :return: Matriz de escolha com rota ótima
+    :rtype: class:`numpy.array` com shape=(n,n)
+    """
 
     # Gera todas as possiveis permutações x
     permutacao = [numpy.array(perm) for perm in permutations(numpy.identity(n))]
@@ -26,7 +25,7 @@ def forca_bruta(n, D, F):
     # Calculo do fator de escolha de acordo com cada permutação
     custo_ponderado = []
     for X in permutacao:
-        fator_escolha = util.calculo_fator_escolha(n, D, F, X)
+        fator_escolha = QAPBanco.calculo_fator_escolha(n, D, F, X)
         custo_ponderado = numpy.append(custo_ponderado, [fator_escolha])
 
     # Retorna matriz de escolha ótima

@@ -5,41 +5,36 @@
 import matplotlib.pyplot as plt
 import time
 import numpy
+
 import src.utilidades as util
+from src.QAPBanco import QAPBanco
 from src.forca_bruta import forca_bruta
 
 
 # Methods #####################################################
 
+def testar_algoritmo(n, repeticoes, debug=0):
+    # Preparar problema
+    qap = QAPBanco(util.gerar_entrada_aleatoria(n))
+    if debug: print("")
+    if debug: print("Problema gerado:")
+    if debug: print(qap.resgatar_dependencias())
+    if debug: print("")
+    if debug: print("Rodando algoritmo", repeticoes, "vezes...")
 
-def teste_forca_bruta(n, repeticoes, debug=0):
-    if (debug): print("")
-    if (debug): print("Número de dependências:", n)
-    if (debug): print("")
-    if (debug): print("Gerando entradas aleatórias...")
-    G, R = util.gerar_entrada_aleatoria(n)
-    if (debug): print("Matriz de coordenadas (G):", [cord for cord in G])
-    if (debug): print("Fator de risco (R):", R)
-    if (debug): print("")
-    if (debug): print("Processando entradas...")
-    D, F = util.prepara_entrada(n, G, R)
-    if (debug): print("Custo de deslocamento (D):")
-    if (debug): print(D)
-    if (debug): print("Fator de risco (F):")
-    if (debug): print(F)
+    # Rodadas do algoritmo
+    tempos = []
+    for i in range(repeticoes):
+        qap.resolver_com(forca_bruta)
+        tempos.append(qap.tempo_execucao())
+        if debug: print("-> Tempo da rodada:", qap.tempo_execucao(), "segundos")
 
-    if (debug): print("")
-    if (debug): print("Rodando Forca Bruta", repeticoes, "vezes...")
-    return numpy.array([rodar_algoritmo(n, D, F, debug) for i in range(repeticoes)])
-
-
-def rodar_algoritmo(n, D, F, debug):
-    start = time.process_time()
-    X = forca_bruta(n, D, F)
-    tim_custo = time.process_time() - start
-
-    if (debug): print("-> Tempo da rodada:", tim_custo, "segundos")
-    return tim_custo
+    # Finalizando rodadas
+    if debug: print("Resultados do problema...")
+    if debug: print("-> Fator de escolha:", qap.fator_escolha())
+    if debug: print("-> Custo logística: ", qap.custo_logistica())
+    if debug: print("-> Rota da Solução: ", qap.rota_solucao())
+    return numpy.array(tempos)
 
 
 # Test ########################################################
@@ -47,7 +42,7 @@ def rodar_algoritmo(n, D, F, debug):
 repeticoes = 5
 min_deps = 2
 max_deps = 7
-debug = 0
+debug = 1
 media = numpy.zeros(max_deps + 1)
 desvp = numpy.zeros(max_deps + 1)
 
@@ -56,7 +51,7 @@ test_n = list(range(min_deps, max_deps + 1))
 for n in test_n:
     print("")
     print(f'Executando com n={n}...')
-    tempos = teste_forca_bruta(n, repeticoes, debug)
+    tempos = testar_algoritmo(n, repeticoes, debug)
 
     media[n] = tempos.mean()
     desvp[n] = tempos.std()

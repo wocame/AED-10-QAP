@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 import time
 import numpy
 
-import src.utilidades as util
-from src.QAPBanco import QAPBanco
-from src.forca_bruta import forca_bruta
+import QAPBancoAnalise.utilidades as util
+from QAPBancoAnalise.QAPBanco import QAPBanco
+from QAPBancoAnalise.forca_bruta import forca_bruta
 
 
 # Methods #####################################################

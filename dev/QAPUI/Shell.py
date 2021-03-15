@@ -20,40 +20,40 @@ class Shell:
         self.__alg = None
 
         # Opcoes
-        self.op_janelas = {
+        self.__op_janelas = {
             0: ('Sair', None),
-            1: ('Resolver uma QAP do banco', self.mostrar_resolver_qap),
-            2: ('Analisar forca bruta', self.mostrar_analisar_forca_bruta)
+            1: ('Resolver uma QAP do banco', self.__mostrar_resolver_qap),
+            2: ('Analisar forca bruta', self.__mostrar_analisar_forca_bruta)
         }
-        self.op_carregar = {
+        self.__op_carregar = {
             0: ('Sair', None),
-            1: ('QAP nova (aleatória)', self.mostrar_obter_dados_aleatorios),
-            2: ('QAP salva', self.mostrar_obter_dados_salvos),
-            3: ('QAP real parcial', self.mostrar_obter_dados_reais_parcial),
-            4: ('QAP real completa', self.mostrar_obter_dados_reais_completo)
+            1: ('QAP nova (aleatória)', self.__mostrar_obter_dados_aleatorios),
+            2: ('QAP salva', self.__mostrar_obter_dados_salvos),
+            3: ('QAP real parcial', self.__mostrar_obter_dados_reais_parcial),
+            4: ('QAP real completa', self.__mostrar_obter_dados_reais_completo)
         }
-        self.op_algoritmos = {
+        self.__op_algoritmos = {
             0: ('Sair', None),
             1: ('Força Bruta', forca_bruta)
         }
-        self.op_salvar = {
+        self.__op_salvar = {
             0: ('Nao salvar', None),
-            1: ('Salvar', self.mostrar_salvar_qap)
+            1: ('Salvar', self.__mostrar_salvar_qap)
         }
 
     def iniciar_ui(self):
-        self.mostrar_boas_vindas()
+        self.__mostrar_boas_vindas()
         while True:
-            opcao = self.mostrar_menu_principal()
+            opcao = self.__mostrar_menu_principal()
             if opcao is None:
                 break
             else:
                 opcao()
-        self.mostrar_despedida()
+        self.__mostrar_despedida()
 
     ## Telas principais #######################################
 
-    def mostrar_boas_vindas(self):
+    def __mostrar_boas_vindas(self):
         print("")
         print("====================================================")
         print("                    QAPBanco                        ")
@@ -73,14 +73,14 @@ class Shell:
         print(" -> William Oliveira Camelo")
         print("====================================================")
 
-    def mostrar_menu_principal(self):
+    def __mostrar_menu_principal(self):
         print("")
         print("-- Menu --------------------------------------------")
         print("")
         print("Escolha o que deseja fazer:")
-        return self.mostrar_selecao_opcao(self.op_janelas)
+        return self.__mostrar_selecao_opcao(self.__op_janelas)
 
-    def mostrar_despedida(self):
+    def __mostrar_despedida(self):
         print("")
         print("====================================================")
         print(" Até a próxima! :)")
@@ -89,16 +89,16 @@ class Shell:
 
     ## Carregar QAP ###########################################
 
-    def mostrar_escolher_qap(self):
+    def __mostrar_escolher_qap(self):
         print("")
         print("Qual QAP deseja usar?")
-        carga_qap = self.mostrar_selecao_opcao(self.op_carregar)
+        carga_qap = self.__mostrar_selecao_opcao(self.__op_carregar)
         if carga_qap is not None: carga_qap()
         print("")
         print(self.__qap)
         return carga_qap
 
-    def mostrar_obter_dados_aleatorios(self):
+    def __mostrar_obter_dados_aleatorios(self):
         print("")
         print("Quantas dependencias terá o problema?")
         while True:
@@ -112,12 +112,12 @@ class Shell:
             n = 2
         self.__qap = QAPBanco(util.gerar_entrada_aleatoria(n))
 
-    def mostrar_obter_dados_salvos(self):
+    def __mostrar_obter_dados_salvos(self):
         print("")
         print("Qual o nome do arquivo (sem extensão)?")
         self.__qap = QAPBanco(util.recuperar_dados(nome=input()))
 
-    def mostrar_obter_dados_reais_parcial(self):
+    def __mostrar_obter_dados_reais_parcial(self):
         print("")
         print("Quantas dependências quer pegar?")
         while True:
@@ -133,21 +133,21 @@ class Shell:
         print(f"Pegando {n} dependencias aleatórias dos dados reais...")
         self.__qap = QAPBanco(util.gerar_entrada(max_dependencias=n))
 
-    def mostrar_obter_dados_reais_completo(self):
+    def __mostrar_obter_dados_reais_completo(self):
         self.__qap = QAPBanco(util.gerar_entrada())
 
     ## Resolver QAP ###########################################
 
-    def mostrar_resolver_qap(self):
+    def __mostrar_resolver_qap(self):
         print("")
         print("-- Resolver QAP ------------------------------------")
         print("")
-        if self.mostrar_escolher_qap() is None: return
-        if self.mostrar_escolher_algoritmo() is None:  return
-        self.mostrar_teste()
-        self.mostrar_salvar()
+        if self.__mostrar_escolher_qap() is None: return
+        if self.__mostrar_escolher_algoritmo() is None:  return
+        self.__mostrar_teste()
+        self.__mostrar_salvar()
 
-    def mostrar_teste(self):
+    def __mostrar_teste(self):
         print("")
         print("Rodando teste...")
         self.__teste = QAPBancoTeste(self.__qap, 1)
@@ -155,28 +155,28 @@ class Shell:
         print(self.__teste)
         print("Solucao:     ", self.__qap.rota_solucao())
 
-    def mostrar_salvar(self):
+    def __mostrar_salvar(self):
         print("")
         print("Deseja salvar a QAP usada?")
-        salvar_qap = self.mostrar_selecao_opcao(self.op_salvar)
+        salvar_qap = self.__mostrar_selecao_opcao(self.__op_salvar)
         if salvar_qap is not None: salvar_qap()
         return salvar_qap
 
-    def mostrar_salvar_qap(self):
+    def __mostrar_salvar_qap(self):
         print("")
         print("Qual o nome do arquivo (sem extensão)?")
         util.salvar_dados(self.__qap.resgatar_dependencias(), nome=input())
 
     ## Analises ###############################################
 
-    def mostrar_analisar_forca_bruta(self):
+    def __mostrar_analisar_forca_bruta(self):
         print("")
         print("-- Analisar: Forca Bruta ---------------------------")
         print("")
         self.__alg = forca_bruta
-        self.mostrar_analise()
+        self.__mostrar_analise()
 
-    def mostrar_analise(self):
+    def __mostrar_analise(self):
         print("Qual o número máximo de dependências que quer analisar?")
         while True:
             try:
@@ -209,13 +209,13 @@ class Shell:
 
     ## Outros #################################################
 
-    def mostrar_escolher_algoritmo(self):
+    def __mostrar_escolher_algoritmo(self):
         print("")
         print("Qual algoritmo deseja usar?")
-        self.__alg = self.mostrar_selecao_opcao(self.op_algoritmos)
+        self.__alg = self.__mostrar_selecao_opcao(self.__op_algoritmos)
         return self.__alg
 
-    def mostrar_selecao_opcao(self, opcoes):
+    def __mostrar_selecao_opcao(self, opcoes):
         for opcao in opcoes.keys():
             print(f"{opcao}) {opcoes[opcao][0]}")
         print("")

@@ -78,7 +78,7 @@ class QAPBanco:
 
         # Obtendo dados dados das dependências
         self.n = n
-        self.id = list(df.iloc[:, 0])
+        self.id = [str(id) for id in df.iloc[:, 0]]
         self.G = np.column_stack((np.array(df.iloc[:, 1]), np.array(df.iloc[:, 2])))
         self.R = np.array(df.iloc[:, 3])
         self.__calcula_matrizes()

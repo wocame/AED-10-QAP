@@ -8,6 +8,7 @@ from QAPBancoAnalise.QAPBancoTeste import QAPBancoTeste
 from QAPBancoAnalise.QAPBancoSuite import QAPBancoSuite
 from Algoritmo.forca_bruta import forca_bruta
 
+
 class Shell:
 
     def __init__(self):
@@ -27,7 +28,9 @@ class Shell:
         self.op_carregar = {
             0: ('Sair', None),
             1: ('QAP nova (aleatória)', self.mostrar_obter_dados_aleatorios),
-            2: ('QAP salva', self.mostrar_obter_dados_salvos)
+            2: ('QAP salva', self.mostrar_obter_dados_salvos),
+            3: ('QAP real parcial', self.mostrar_obter_dados_reais_parcial),
+            4: ('QAP real completa', self.mostrar_obter_dados_reais_completo)
         }
         self.op_algoritmos = {
             0: ('Sair', None),
@@ -35,7 +38,7 @@ class Shell:
         }
         self.op_salvar = {
             0: ('Nao salvar', None),
-            1: ('Salvar', util.salvar_dados)
+            1: ('Salvar', self.mostrar_salvar_qap)
         }
 
     def iniciar_ui(self):
@@ -84,32 +87,6 @@ class Shell:
         print("====================================================")
         print("")
 
-    ## Resolver QAP ###########################################
-
-    def mostrar_resolver_qap(self):
-        print("")
-        print("-- Resolver QAP ------------------------------------")
-        print("")
-        if self.mostrar_escolher_qap() is None: return
-        if self.mostrar_escolher_algoritmo() is None:  return
-        self.mostrar_teste()
-        self.mostrar_salvar()
-
-    def mostrar_teste(self):
-        print("")
-        print("Rodando teste...")
-        self.__teste = QAPBancoTeste(self.__qap)
-        self.__teste.resolver_problema_com(self.__alg)
-        print(self.__teste)
-        print("Solucao:     ", self.__qap.rota_solucao())
-
-    def mostrar_salvar(self):
-        print("")
-        print("Deseja salvar a QAP usada?")
-        salvar_qap = self.mostrar_selecao_opcao(self.op_salvar)
-        if salvar_qap is not None: salvar_qap(self.__qap.resgatar_dependencias())
-        return salvar_qap
-
     ## Carregar QAP ###########################################
 
     def mostrar_escolher_qap(self):
@@ -117,6 +94,8 @@ class Shell:
         print("Qual QAP deseja usar?")
         carga_qap = self.mostrar_selecao_opcao(self.op_carregar)
         if carga_qap is not None: carga_qap()
+        print("")
+        print(self.__qap)
         return carga_qap
 
     def mostrar_obter_dados_aleatorios(self):
@@ -132,13 +111,61 @@ class Shell:
             print("Forçando 'n' para valor mínimo 2")
             n = 2
         self.__qap = QAPBanco(util.gerar_entrada_aleatoria(n))
-        print(self.__qap)
 
     def mostrar_obter_dados_salvos(self):
         print("")
-        print("Recuperando ultimo dado salvo...")
-        self.__qap = QAPBanco(util.recuperar_dados())
-        print(self.__qap)
+        print("Qual o nome do arquivo (sem extensão)?")
+        self.__qap = QAPBanco(util.recuperar_dados(nome=input()))
+
+    def mostrar_obter_dados_reais_parcial(self):
+        print("")
+        print("Quantas dependências quer pegar?")
+        while True:
+            try:
+                n = int(input())
+                break
+            except:
+                print("Entrada inválida! Digite um inteiro.")
+        if n < 2:
+            print("Forçando 'n' para valor mínimo 2")
+            n = 2
+        print("")
+        print(f"Pegando {n} dependencias aleatórias dos dados reais...")
+        self.__qap = QAPBanco(util.gerar_entrada(max_dependencias=n))
+
+    def mostrar_obter_dados_reais_completo(self):
+        self.__qap = QAPBanco(util.gerar_entrada())
+
+    ## Resolver QAP ###########################################
+
+    def mostrar_resolver_qap(self):
+        print("")
+        print("-- Resolver QAP ------------------------------------")
+        print("")
+        if self.mostrar_escolher_qap() is None: return
+        if self.mostrar_escolher_algoritmo() is None:  return
+        self.mostrar_teste()
+        self.mostrar_salvar()
+
+    def mostrar_teste(self):
+        print("")
+        print("Rodando teste...")
+        self.__teste = QAPBancoTeste(self.__qap, 1)
+        self.__teste.resolver_problema_com(self.__alg)
+        print(self.__teste)
+        print("Solucao:     ", self.__qap.rota_solucao())
+
+    def mostrar_salvar(self):
+        print("")
+        print("Deseja salvar a QAP usada?")
+        salvar_qap = self.mostrar_selecao_opcao(self.op_salvar)
+        if salvar_qap is not None: salvar_qap()
+        return salvar_qap
+
+    def mostrar_salvar_qap(self):
+        print("")
+        print("Qual o nome do arquivo (sem extensão)?")
+        util.salvar_dados(self.__qap.resgatar_dependencias(), nome=input())
 
     ## Analises ###############################################
 
@@ -169,7 +196,7 @@ class Shell:
         print("Preparando suite de testes...")
         test_n = list(range(2, max_n + 1))
         self.__qap = [QAPBanco(util.gerar_entrada_aleatoria(n)) for n in test_n]
-        self.__teste = [QAPBancoTeste(qap) for qap in self.__qap]
+        self.__teste = [QAPBancoTeste(qap, repeticoes) for qap in self.__qap]
         self.__suite = QAPBancoSuite(self.__teste, self.__alg)
         print("Rodando suite de testes...")
         self.__suite.rodar_testes()
@@ -179,7 +206,6 @@ class Shell:
         plot = self.__suite.grafico_tempo_execucao()
         plt.savefig("../../dados/analise_" + self.__alg.__name__ + ".png")
         plt.close()
-
 
     ## Outros #################################################
 

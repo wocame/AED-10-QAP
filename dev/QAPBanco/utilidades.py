@@ -50,9 +50,9 @@ def gerar_entrada(path='../../dados', nome='Relação dos Pontos de Atendimento 
     # Removendo registros excedentes
     if max_dependencias is not None:
         num_dependencias = len(df.index)
-        if max_dependencias >= num_dependencias:
+        if max_dependencias <= 0:
             return None
-        else:
+        elif max_dependencias < num_dependencias:
             df = df.drop(np.random.choice(df.index, num_dependencias - max_dependencias, replace=False))
 
     # Se não contiver coluna de riscos, insere com valores aleatórios

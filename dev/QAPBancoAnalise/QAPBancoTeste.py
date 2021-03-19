@@ -113,10 +113,22 @@ class QAPBancoTeste:
 
     # Métodos privados ########################################
 
+    def __copy__(self):
+        obj = QAPBancoTeste()
+        obj.repeticoes = self.repeticoes
+        obj.__qap = self.__qap
+        obj.__qap_solucionado = self.__qap_solucionado
+        obj.__repeticoes = self.__repeticoes
+        obj.__alg = self.__alg
+        return obj
+
     def __str__(self):
         string = f"QAPBancoTest com {self.__qap.num_dependencias()} dependencias\n"
         if self.__alg is None:
             string += "<Não executado>"
+        elif self.__repeticoes <= 1:
+            string += f"Algoritmo:    {self.__alg.__name__}\n"
+            string += f"Tempo stats:  {self.tempo_medio()}"
         else:
             string += f"Algoritmo:    {self.__alg.__name__}\n"
             string += f"Repeticoes:   {self.__repeticoes}\n"

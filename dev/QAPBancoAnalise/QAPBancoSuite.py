@@ -103,13 +103,17 @@ class QAPBancoSuite:
         media = []
         stdev = []
         for n in valores_n:
-            media_n = 0
-            stdev_n = 0
+            media_n = []
+            stdev_n = []
             for teste in teste_n[n]:
-                media_n += teste.tempo_medio()
-                stdev_n += teste.tempo_desvio()
-            media.append(media_n / len(teste_n[n]))
-            stdev.append(stdev_n / len(teste_n[n]))
+                media_n.append(teste.tempo_medio())
+            for teste in teste_n[n]:
+                if teste.tempo_desvio() == 0:
+                    stdev_n.append(np.std(media_n))
+                else:
+                    stdev_n.append(teste.tempo_desvio())
+            media.append(np.mean(media_n))
+            stdev.append(np.mean(stdev_n))
 
         # Retornar dataframe
         return pd.DataFrame({'n': valores_n, 'media': media, 'desvio': stdev})
@@ -129,10 +133,19 @@ class QAPBancoSuite:
         ax.plot(df['n'], df['media'], 'b', label="media")
         ax.errorbar(df['n'], df['media'], df['desvio'], linestyle='None', ecolor='r', label="desvio padrão")
         ax.legend(loc='upper left')
+        ax.set_xlabel("Número de dependências")
+        ax.set_ylabel("Segundos")
         ax.title.set_text("Tempo de execução: "+self.__alg.__name__)
         return ax
 
     # Métodos privados ########################################
+
+    def __copy__(self):
+        obj = QAPBancoSuite()
+        obj.__alg = self.__alg
+        obj.__testes = self.__testes
+        obj.__testes_executados = self.__testes_executados
+        return obj
 
     def __str__(self):
         string = f"QAPBancoSuite com {len(self.__testes)} testes\n"

@@ -3,10 +3,13 @@
 # Imports
 import matplotlib.pyplot as plt
 import QAPBanco.utilidades as util
+import pandas as pd
 from QAPBanco.QAPBanco import QAPBanco
 from QAPBancoAnalise.QAPBancoTeste import QAPBancoTeste
 from QAPBancoAnalise.QAPBancoSuite import QAPBancoSuite
 from Algoritmo.forca_bruta import forca_bruta
+from Algoritmo.simulated_annealing import simulated_annealing
+from copy import copy
 
 
 class Shell:
@@ -18,12 +21,16 @@ class Shell:
         self.__teste = None
         self.__suite = None
         self.__alg = None
+        self.__repeticoes = 0
+        self.__num_dependencias_min = 2
+        self.__num_dependencias_max = 2
 
         # Opcoes
         self.__op_janelas = {
             0: ('Sair', None),
             1: ('Resolver uma QAP do banco', self.__mostrar_resolver_qap),
-            2: ('Analisar forca bruta', self.__mostrar_analisar_forca_bruta)
+            2: ('Analisar algoritmo', self.__mostrar_analisar_algoritmo),
+            3: ('Comparar algoritmos', self.__mostrar_comparar_algoritmos)
         }
         self.__op_carregar = {
             0: ('Sair', None),
@@ -34,7 +41,8 @@ class Shell:
         }
         self.__op_algoritmos = {
             0: ('Sair', None),
-            1: ('Força Bruta', forca_bruta)
+            1: ('Força Bruta', forca_bruta),
+            2: ('Classic Simulated Annealing', simulated_annealing)
         }
         self.__op_salvar = {
             0: ('Nao salvar', None),
@@ -143,7 +151,7 @@ class Shell:
         print("-- Resolver QAP ------------------------------------")
         print("")
         if self.__mostrar_escolher_qap() is None: return
-        if self.__mostrar_escolher_algoritmo() is None:  return
+        if self.__mostrar_escolher_algoritmo() is None: return
         self.__mostrar_teste()
         self.__mostrar_salvar()
 
@@ -169,43 +177,59 @@ class Shell:
 
     ## Analises ###############################################
 
-    def __mostrar_analisar_forca_bruta(self):
+    def __mostrar_analisar_algoritmo(self):
         print("")
-        print("-- Analisar: Forca Bruta ---------------------------")
-        print("")
-        self.__alg = forca_bruta
-        self.__mostrar_analise()
+        print("-- Analisar algoritmo ------------------------------")
+        self.__alg = self.__mostrar_escolher_algoritmo()
+        if self.__alg is not None:
+            self.__mostrar_obter_config_teste()
+            self.__gerar_problemas_aleatorios()
+            self.__roda_suite_testes()
+            self.__mostrar_analise()
 
     def __mostrar_analise(self):
-        print("Qual o número máximo de dependências que quer analisar?")
-        while True:
-            try:
-                max_n = int(input())
-                break
-            except:
-                print("Entrada inválida! Digite um inteiro.")
-        print("")
-        print("Quantas repetições por número de dependências?")
-        while True:
-            try:
-                repeticoes = int(input())
-                break
-            except:
-                print("Entrada inválida! Digite um inteiro.")
-        print("")
-        print("Preparando suite de testes...")
-        test_n = list(range(2, max_n + 1))
-        self.__qap = [QAPBanco(util.gerar_entrada_aleatoria(n)) for n in test_n]
-        self.__teste = [QAPBancoTeste(qap, repeticoes) for qap in self.__qap]
-        self.__suite = QAPBancoSuite(self.__teste, self.__alg)
-        print("Rodando suite de testes...")
-        self.__suite.rodar_testes()
         print("")
         print(self.__suite)
         print("Salvando imagem da analise...")
         plot = self.__suite.grafico_tempo_execucao()
         plt.savefig("../../dados/analise_" + self.__alg.__name__ + ".png")
         plt.close()
+
+    ## Comparar ###############################################
+
+    def __mostrar_comparar_algoritmos(self):
+        print("")
+        print("-- Comparar algoritmos -----------------------------")
+        self.__mostrar_obter_config_teste()
+        self.__gerar_problemas_aleatorios()
+        df_media = pd.DataFrame({'n': range(self.__num_dependencias_min, self.__num_dependencias_max + 1)})
+        df_desvio = pd.DataFrame({'n': range(self.__num_dependencias_min, self.__num_dependencias_max + 1)})
+        for alg in self.__op_algoritmos:
+            self.__alg = self.__op_algoritmos[alg][1]
+            if self.__alg is not None:
+                print("")
+                print(f"Usando '{self.__alg.__name__}'", end="")
+                self.__roda_suite_testes()
+                df_media = df_media.merge(self.__suite.dados_tempo_execucao()[['n', 'media']], on='n')
+                df_media.rename(columns={'media':self.__alg.__name__}, inplace=True)
+                df_desvio = df_desvio.merge(self.__suite.dados_tempo_execucao()[['n', 'desvio']], on='n')
+                df_desvio.rename(columns={'desvio':self.__alg.__name__}, inplace=True)
+        print("")
+        print("Médias")
+        print(df_media)
+        print("")
+        print("Desvios padrão")
+        print(df_desvio)
+        print("")
+        print("Salvando imagem da comparação...")
+        ax = df_media.plot(x='n', yerr=df_desvio)
+        ax.legend(loc='upper left')
+        ax.set_xlabel("Número de dependências")
+        ax.set_ylabel("Tempo de execução (s)")
+        ax.locator_params(axis='x', integer=True)
+        ax.title.set_text("Comparação dos algoritmos")
+        ax.figure.savefig("../../dados/comparacao_algoritmos.png")
+
 
     ## Outros #################################################
 
@@ -230,6 +254,37 @@ class Shell:
             except:
                 print("Opção inválida!")
         return opcoes[sel][1]
+
+    def __gerar_problemas_aleatorios(self):
+        print("")
+        print(f"Gerando {self.__repeticoes} problema(s) aleatório(s) de n={self.__num_dependencias_min} até {self.__num_dependencias_max}...")
+        test_n = list(range(self.__num_dependencias_min, self.__num_dependencias_max + 1))
+        self.__qap = [QAPBanco(util.gerar_entrada_aleatoria(n)) for n in test_n for i in range(self.__repeticoes)]
+
+    def __roda_suite_testes(self):
+        print("")
+        print("Rodando suite de testes...")
+        self.__teste = [QAPBancoTeste(qap, 1) for qap in self.__qap]
+        self.__suite = QAPBancoSuite(self.__teste, self.__alg)
+        self.__suite.rodar_testes()
+
+    def __mostrar_obter_config_teste(self):
+        print("")
+        print("Qual o número máximo de dependências que quer analisar?")
+        while True:
+            try:
+                self.__num_dependencias_max = int(input())
+                break
+            except:
+                print("Entrada inválida! Digite um inteiro.")
+        print("")
+        print("Quantas repetições por número de dependências?")
+        while True:
+            try:
+                self.__repeticoes = int(input())
+                break
+            except:
+                print("Entrada inválida! Digite um inteiro.")
 
 
 shell = Shell()

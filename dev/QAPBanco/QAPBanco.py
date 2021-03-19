@@ -118,24 +118,31 @@ class QAPBanco:
         """
         return self.__X
 
+    def vizinhos_solucao(self):
+        """
+        Converte a matriz de solucao em uma array de vizinhos
+        :returns: Lista dos IDs dos vizinhos
+        """
+        vizinhos = []
+        if self.__X is not None:
+            for j in range(self.__n):
+                for i in range(self.__n):
+                    if self.__X[i][j] == 1:
+                        vizinhos += [i]
+        return vizinhos
+
     def rota_solucao(self):
         """
         Converte a matriz de solucao em uma rota mais facil de visualizar
-        :param n: Número de dependências do problema
-        :param X: Matriz da rota a ser convertida em rota com shape=(n,n)
         :returns: Rota no formato "Dep1 -> Dep2 -> ... -> DepN -> Dep1"
         """
 
+        rota = "<Não resolvido>"
         if self.__X is not None:
-            rota = ""
-            for j in range(self.__n):
-                for i in range(self.__n):
-                    if self.__X[i][j] == 1: rota += self.id[i] + " "
-                rota += "-> "
-            for i in range(self.__n):
-                if self.__X[i][0] == 1: rota += self.id[i] + " "
-        else:
-            rota = "<Não resolvido>"
+            vizinhos = self.vizinhos_solucao()
+            rota = str(self.id[vizinhos[0]])
+            for vizinho in vizinhos[1:]:
+                rota += " -> " + str(self.id[vizinho])
         return rota
 
     def fator_escolha(self):
@@ -193,6 +200,21 @@ class QAPBanco:
                     for p in range(n):
                         custo_logistica += D[i][j] * X[i][k] * X[j][p]
         return custo_logistica
+
+    @staticmethod
+    def calculo_solucao_vizinhos(vizinhos=None):
+        """
+        Converte a array de vizinhos em uma matriz de solucao
+        :param vizinhos: Array 1-D de vizinhos
+        :returns: Matriz de solução
+        """
+
+        n = len(vizinhos)
+        X = np.zeros((n,n))
+        if vizinhos is not None:
+            for j in range(n):
+                X[int(vizinhos[j])][j] = 1
+        return X
 
     # Métodos privados ########################################
 

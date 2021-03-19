@@ -10,13 +10,9 @@ def forca_bruta(n, D, F):
     """
     Algoritmo Força Bruta para calcular QAP do banco
     :param n: Número de dependências
-    :type n: int
     :param D: Matriz de custo de deslocamento entre dependências
-    :type D: class:`numpy.array` com shape=(n,n)
     :param F: Matriz de fator de risco
-    :type F: class:`numpy.array` com shape=(n,n,n,n)
     :return: Matriz de escolha com rota ótima
-    :rtype: class:`numpy.array` com shape=(n,n)
     """
 
     # Gera todas as possiveis permutações x

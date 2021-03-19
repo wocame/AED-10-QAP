@@ -29,6 +29,10 @@ def gerar_entrada_aleatoria(n):
     # Cada indice representa o risco da respectiva dependência
     R = np.random.randint(1, 6, n)
 
+    return montar_dataframe_entrada(id, latitude, longitude, R)
+
+
+def montar_dataframe_entrada(id, latitude, longitude, R):
     return pd.DataFrame({'id': id, 'lat': latitude, 'lon': longitude, 'risco': R})
 
 
@@ -60,7 +64,7 @@ def gerar_entrada(path='../../dados', nome='Relação dos Pontos de Atendimento 
         n = len(df.index)
         df.insert(loc=len(df.columns), column='RISCO', value=np.random.randint(1, 6, n))
 
-    return pd.DataFrame({'id': df['PREFIXO'], 'lat': df['LATITUDE'], 'lon': df['LONGITUDE'], 'risco': df['RISCO']})
+    return montar_dataframe_entrada(df['PREFIXO'], df['LATITUDE'], df['LONGITUDE'], df['RISCO'])
 
 
 def salvar_dados(df: pd.DataFrame, path='../../dados', nome='qap'):

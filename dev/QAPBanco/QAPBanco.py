@@ -118,32 +118,32 @@ class QAPBanco:
         """
         return self.__X
 
-    def vizinhos_solucao(self):
+    def rota_solucao(self):
         """
-        Converte a matriz de solucao em uma array de vizinhos
-        :returns: Lista dos IDs dos vizinhos
+        Converte a matriz de solucao em uma array da rota
+        :returns: Lista dos IDs da rota
         """
-        vizinhos = []
+        rota = []
         if self.__X is not None:
             for j in range(self.__n):
                 for i in range(self.__n):
                     if self.__X[i][j] == 1:
-                        vizinhos += [i]
-        return vizinhos
+                        rota += [i]
+        return rota
 
-    def rota_solucao(self):
+    def str_rota_solucao(self):
         """
         Converte a matriz de solucao em uma rota mais facil de visualizar
         :returns: Rota no formato "Dep1 -> Dep2 -> ... -> DepN -> Dep1"
         """
 
-        rota = "<Não resolvido>"
+        str_rota = "<Não resolvido>"
         if self.__X is not None:
-            vizinhos = self.vizinhos_solucao()
-            rota = str(self.id[vizinhos[0]])
-            for vizinho in vizinhos[1:]:
-                rota += " -> " + str(self.id[vizinho])
-        return rota
+            rota = self.rota_solucao()
+            rota = str(self.id[rota[0]])
+            for dependencia in rota[1:]:
+                str_rota += " -> " + str(self.id[dependencia])
+        return str_rota
 
     def fator_escolha(self):
         """
@@ -202,18 +202,18 @@ class QAPBanco:
         return custo_logistica
 
     @staticmethod
-    def calculo_solucao_vizinhos(vizinhos=None):
+    def calculo_solucao_rota(rota=None):
         """
-        Converte a array de vizinhos em uma matriz de solucao
-        :param vizinhos: Array 1-D de vizinhos
+        Converte a array de rota em uma matriz de solucao
+        :param rota: Array 1-D de rota
         :returns: Matriz de solução
         """
 
-        n = len(vizinhos)
-        X = np.zeros((n,n))
-        if vizinhos is not None:
+        n = len(rota)
+        X = np.zeros((n, n))
+        if rota is not None:
             for j in range(n):
-                X[int(vizinhos[j])][j] = 1
+                X[int(rota[j])][j] = 1
         return X
 
     # Métodos privados ########################################
@@ -294,5 +294,5 @@ class QAPBanco:
     def __str__(self):
         string = "QAPBanco:\n"
         string += str(self.resgatar_dependencias()) + '\n'
-        string += "Solucao: " + self.rota_solucao()
+        string += "Solucao: " + self.str_rota_solucao()
         return string

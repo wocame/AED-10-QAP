@@ -161,7 +161,7 @@ class Shell:
         self.__teste = QAPBancoTeste(self.__qap, 1)
         self.__teste.resolver_problema_com(self.__alg)
         print(self.__teste)
-        print("Solucao:     ", self.__qap.rota_solucao())
+        print("Solucao:     ", self.__qap.str_rota_solucao())
 
     def __mostrar_salvar(self):
         print("")

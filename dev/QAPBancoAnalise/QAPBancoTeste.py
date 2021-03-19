@@ -88,7 +88,7 @@ class QAPBancoTeste:
         Informa a(s) rota(s) da solucao do problema
         :returns: Rota(s) encontradas
         """
-        return [qap.rota_solucao() for qap in self.__qap_solucionado]
+        return [qap.str_rota_solucao() for qap in self.__qap_solucionado]
 
     def tempo_resolvido(self):
         """

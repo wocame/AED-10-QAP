@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 
 # Imports
-import numpy as np
-import QAPBanco.utilidades as utils
 from QAPBanco.QAPBanco import QAPBanco
 from scipy.optimize import dual_annealing
-import pandas as pd
 
 
 # Função objetivo adaptada do QAP para Simulated Annealing
-def delta(n, D, F, vizinhos):
-    return QAPBanco.calculo_fator_escolha(n, D, F, QAPBanco.calculo_solucao_vizinhos(vizinhos))
+def delta(n, D, F, rota):
+    return QAPBanco.calculo_fator_escolha(n, D, F, QAPBanco.calculo_solucao_rota(rota))
 
 
 # Algoritmo
@@ -28,5 +25,4 @@ def simulated_annealing(n, D, F):
     res = dual_annealing(func=lambda x: delta(n, D, F, x),
                          bounds=list(zip(lb, ub)),
                          no_local_search=True)
-
-    return QAPBanco.calculo_solucao_vizinhos(res.x)
+    return QAPBanco.calculo_solucao_rota(res.x)

@@ -158,7 +158,7 @@ class Shell:
     def __mostrar_teste(self):
         print("")
         print("Rodando teste...")
-        self.__teste = QAPBancoTeste(self.__qap, 1)
+        self.__teste = QAPBancoTeste(self.__qap)
         self.__teste.resolver_problema_com(self.__alg)
         print(self.__teste)
         print("Solucao:     ", self.__qap.str_rota_solucao())
@@ -264,7 +264,7 @@ class Shell:
     def __roda_suite_testes(self):
         print("")
         print("Rodando suite de testes...")
-        self.__teste = [QAPBancoTeste(qap, 1) for qap in self.__qap]
+        self.__teste = [QAPBancoTeste(qap) for qap in self.__qap]
         self.__suite = QAPBancoSuite(self.__teste, self.__alg)
         self.__suite.rodar_testes()
 

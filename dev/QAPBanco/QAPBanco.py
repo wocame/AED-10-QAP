@@ -140,7 +140,7 @@ class QAPBanco:
         str_rota = "<Não resolvido>"
         if self.__X is not None:
             rota = self.rota_solucao()
-            rota = str(self.id[rota[0]])
+            str_rota = str(self.id[rota[0]])
             for dependencia in rota[1:]:
                 str_rota += " -> " + str(self.id[dependencia])
         return str_rota

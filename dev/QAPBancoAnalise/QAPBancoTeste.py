@@ -16,7 +16,7 @@ class QAPBancoTeste:
     :param __alg: Algoritmo usado para solucionar o problema
     """
 
-    def __init__(self, qap=None, repeticoes=5):
+    def __init__(self, qap=None, repeticoes=1):
         """
         Método construtor
         :param qap: Problema a ser testado
@@ -126,11 +126,13 @@ class QAPBancoTeste:
         string = f"QAPBancoTest com {self.__qap.num_dependencias()} dependencias\n"
         if self.__alg is None:
             string += "<Não executado>"
-        elif self.__repeticoes <= 1:
-            string += f"Algoritmo:    {self.__alg.__name__}\n"
-            string += f"Tempo stats:  {self.tempo_medio()}"
         else:
             string += f"Algoritmo:    {self.__alg.__name__}\n"
-            string += f"Repeticoes:   {self.__repeticoes}\n"
-            string += f"Tempo stats:  {self.tempo_medio()} +- {self.tempo_desvio()}"
+            if self.__repeticoes > 1:
+                string += f"Repeticoes:   {self.__repeticoes}\n"
+                string += f"Tempo stats:  {self.tempo_medio()} +- {self.tempo_desvio()}\n"
+            else:
+                string += f"Tempo stats:  {self.tempo_medio()}\n"
+            string += f"Fator achado: {self.__qap_solucionado[0].fator_escolha()}\n"
+            string += f"Rota achada:  {self.__qap_solucionado[0].str_rota_solucao()}"
         return string

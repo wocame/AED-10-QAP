@@ -8,6 +8,7 @@ from QAPBanco.QAPBanco import QAPBanco
 from QAPBancoAnalise.QAPBancoTeste import QAPBancoTeste
 from QAPBancoAnalise.QAPBancoSuite import QAPBancoSuite
 from Algoritmo.forca_bruta import forca_bruta
+from Algoritmo.branch_bound import branch_bound
 from Algoritmo.simulated_annealing import simulated_annealing
 from copy import copy
 
@@ -42,7 +43,8 @@ class Shell:
         self.__op_algoritmos = {
             0: ('Sair', None),
             1: ('Força Bruta', forca_bruta),
-            2: ('Classic Simulated Annealing', simulated_annealing)
+            2: ('Dual-Procedure Branch and Bound', branch_bound),
+            3: ('Classic Simulated Annealing', simulated_annealing)
         }
         self.__op_salvar = {
             0: ('Nao salvar', None),

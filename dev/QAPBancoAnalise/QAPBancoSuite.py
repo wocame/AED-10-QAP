@@ -118,6 +118,17 @@ class QAPBancoSuite:
         # Retornar dataframe
         return pd.DataFrame({'n': valores_n, 'media': media, 'desvio': stdev})
 
+    def dados_rota_solucao(self):
+        rotas = []
+        fatores = []
+        if self.__testes_executados is None:
+            return None
+        qaps = list(range(len(self.__testes_executados)))
+        for teste in self.__testes_executados:
+            rotas += teste.rota_resolvido()
+            fatores += teste.fator_resolvido()
+        return pd.DataFrame({'qap': qaps, 'rota': rotas, 'fator': fatores})
+
     def grafico_tempo_execucao(self):
         """
         Gera gráfico com dados relacionados ao tempo de execução dos testes

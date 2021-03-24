@@ -10,6 +10,7 @@ from QAPBancoAnalise.QAPBancoSuite import QAPBancoSuite
 from Algoritmo.forca_bruta import forca_bruta
 from Algoritmo.branch_bound import branch_bound
 from Algoritmo.simulated_annealing import simulated_annealing
+import warnings
 from copy import copy
 
 
@@ -52,6 +53,7 @@ class Shell:
         }
 
     def iniciar_ui(self):
+        warnings.simplefilter("ignore", UserWarning)
         self.__mostrar_boas_vindas()
         while True:
             opcao = self.__mostrar_menu_principal()
@@ -163,7 +165,6 @@ class Shell:
         self.__teste = QAPBancoTeste(self.__qap)
         self.__teste.resolver_problema_com(self.__alg)
         print(self.__teste)
-        print("Solucao:     ", self.__qap.str_rota_solucao())
 
     def __mostrar_salvar(self):
         print("")
@@ -194,7 +195,7 @@ class Shell:
         print(self.__suite)
         print("Salvando imagem da analise...")
         plot = self.__suite.grafico_tempo_execucao()
-        plt.savefig("../../dados/analise_" + self.__alg.__name__ + ".png")
+        plt.savefig("../../resultados/analise_" + self.__alg.__name__ + ".png")
         plt.close()
 
     ## Comparar ###############################################
@@ -206,16 +207,29 @@ class Shell:
         self.__gerar_problemas_aleatorios()
         df_media = pd.DataFrame({'n': range(self.__num_dependencias_min, self.__num_dependencias_max + 1)})
         df_desvio = pd.DataFrame({'n': range(self.__num_dependencias_min, self.__num_dependencias_max + 1)})
+        df_rota = pd.DataFrame({'qap': range(self.__repeticoes * (self.__num_dependencias_max - self.__num_dependencias_min + 1))})
+        df_fator = pd.DataFrame({'qap': range(self.__repeticoes * (self.__num_dependencias_max - self.__num_dependencias_min + 1))})
+        solucoes = {}
         for alg in self.__op_algoritmos:
             self.__alg = self.__op_algoritmos[alg][1]
             if self.__alg is not None:
                 print("")
                 print(f"Usando '{self.__alg.__name__}'", end="")
                 self.__roda_suite_testes()
+                df_rota = df_rota.merge(self.__suite.dados_rota_solucao()[['qap', 'rota']], on='qap')
+                df_rota.rename(columns={'rota':self.__alg.__name__}, inplace=True)
+                df_fator = df_fator.merge(self.__suite.dados_rota_solucao()[['qap', 'fator']], on='qap')
+                df_fator.rename(columns={'fator':self.__alg.__name__}, inplace=True)
                 df_media = df_media.merge(self.__suite.dados_tempo_execucao()[['n', 'media']], on='n')
                 df_media.rename(columns={'media':self.__alg.__name__}, inplace=True)
                 df_desvio = df_desvio.merge(self.__suite.dados_tempo_execucao()[['n', 'desvio']], on='n')
                 df_desvio.rename(columns={'desvio':self.__alg.__name__}, inplace=True)
+        print("")
+        print("Rotas")
+        print(df_rota)
+        print("")
+        print("Fatores")
+        print(df_fator)
         print("")
         print("Médias")
         print(df_media)
@@ -230,7 +244,12 @@ class Shell:
         ax.set_ylabel("Tempo de execução (s)")
         ax.locator_params(axis='x', integer=True)
         ax.title.set_text("Comparação dos algoritmos")
-        ax.figure.savefig("../../dados/comparacao_algoritmos.png")
+        ax.figure.savefig("../../resultados/comparacao_algoritmos.png")
+        print("Salvando resultados...")
+        util.salvar_dados(df_rota, "../../resultados", "comparacao_rota")
+        util.salvar_dados(df_fator, "../../resultados", "comparacao_fator")
+        util.salvar_dados(df_media, "../../resultados", "comparacao_media")
+        util.salvar_dados(df_desvio, "../../resultados", "comparacao_desvio")
 
 
     ## Outros #################################################

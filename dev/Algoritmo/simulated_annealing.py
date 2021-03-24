@@ -1,13 +1,29 @@
 # -*- coding: utf-8 -*-
 
 # Imports
+import random
+
 from QAPBanco.QAPBanco import QAPBanco
-from scipy.optimize import dual_annealing
+from Algoritmo.anneal import Annealer
 
+class QAPSA(Annealer):
 
-# Função objetivo adaptada do QAP para Simulated Annealing
-def delta(n, D, F, rota):
-    return QAPBanco.calculo_fator_escolha(n, D, F, QAPBanco.calculo_solucao_rota(rota))
+    def __init__(self, n, D, F):
+        self.n = n
+        self.D = D
+        self.F = F
+        super(QAPSA, self).__init__(list(range(n)))  # important!
+
+    def update(self, *args, **kwargs):
+        return
+
+    def move(self):
+        a = random.randint(0, len(self.state) - 1)
+        b = random.randint(0, len(self.state) - 1)
+        self.state[a], self.state[b] = self.state[b], self.state[a]
+
+    def energy(self):
+        return QAPBanco.calculo_fator_escolha(self.n, self.D, self.F, QAPBanco.calculo_solucao_rota(self.state))
 
 
 # Algoritmo
@@ -20,9 +36,6 @@ def simulated_annealing(n, D, F):
     :return: Matriz de escolha com rota ótima
     """
 
-    lb = [0] * n
-    ub = [n-1] * n
-    res = dual_annealing(func=lambda x: delta(n, D, F, x),
-                         bounds=list(zip(lb, ub)),
-                         no_local_search=True)
-    return QAPBanco.calculo_solucao_rota(res.x)
+    qapsa = QAPSA(n, D, F)
+    rota, _ = qapsa.anneal()
+    return QAPBanco.calculo_solucao_rota(rota)

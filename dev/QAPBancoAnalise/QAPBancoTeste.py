@@ -83,6 +83,13 @@ class QAPBancoTeste:
         """
         return self.__qap_solucionado
 
+    def fator_resolvido(self):
+        """
+        Informa o(s) fator(es) da solucao do problema
+        :returns: Fator(es) encontradas
+        """
+        return [qap.fator_escolha() for qap in self.__qap_solucionado]
+
     def rota_resolvido(self):
         """
         Informa a(s) rota(s) da solucao do problema

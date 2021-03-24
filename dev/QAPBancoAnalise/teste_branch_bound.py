@@ -13,8 +13,8 @@ from Algoritmo.forca_bruta import forca_bruta
 # Configurações ###############################################
 
 repeticoes = 1
-min_deps = 5
-max_deps = 5
+min_deps = 6
+max_deps = 6
 funcao = branch_bound
 
 # Parte constante #############################################

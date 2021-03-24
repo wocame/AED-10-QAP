@@ -2,6 +2,7 @@
 
 # Imports
 from scipy.optimize import linear_sum_assignment
+from itertools import permutations
 from copy import copy
 
 import numpy as np
@@ -30,13 +31,67 @@ def branch_bound(n, D, F):
         for j in range(n):
             for k in range(n):
                 for p in range(n):
-                    C_bb[i][k][j][p] = int(D[i][j] * F[i][j][k][p] * 1000000)
+                    C_bb[i][k][j][p] = int(D[i][j] * F[i][j][k][p] * 1000)
 
-    X, _ = passo_1(n, C_bb)
+    X, lower_bound = hgb(n, C_bb)
+    if X is None:
+        X, _ = branch(n, C_bb, lower_bound)
     return X
 
+def branch(n, C_bb, menor_custo):
 
-def passo_1(n, C_bb):
+    # Caso especial: final da árvore
+    if n == 1:
+        return [1], C_bb[0][0][0][0]
+
+    # BRANCH: Fixa uma dependência em uma posição e gera um problema N-1
+    # '-> Fazendo C_bb[i][k] = 1, os demais C_bb[i][*] e C_bb[*][k] são forçados a 0
+    X = None
+    for i in range(n):
+        for k in range(n):
+
+            # Formulando custo do problema N-1
+            # '-> C do branch = C_branch = C_bb[ic][kc] para ic,kc de 0 a N-1, ic != i, kc != k
+            # '-> C_branch[ic][kc] = C[ic][kc][jc][pc] para jc,pc de 0 a N-1, jc != i, pc != k
+            # '-> C_branch_final = C_branch[ic][kc][jc][kc] + C_bb[i][k][jc][kc] + C_bb[ic][kc][i][k]
+            i_branch = [ic for ic in range(n) if ic != i]
+            k_branch = [kc for kc in range(n) if kc != k]
+            j_branch = [jc for jc in range(n) if jc != i]
+            p_branch = [pc for pc in range(n) if pc != k]
+            C_branch = [[[[C_bb[ic][kc][jc][pc] + C_bb[ic][kc][i][k] + C_bb[i][k][jc][pc]
+                           for pc in p_branch]
+                          for jc in j_branch]
+                         for kc in k_branch]
+                        for ic in i_branch]
+
+            # BOUND: Checando bounds do problema
+            _, lb = hgb(n - 1, C_branch)
+
+            if menor_custo is not None:
+                if lb > menor_custo:
+                    continue
+
+            # Branching recursivo
+            X_branch, custo_branch = branch(n-1, C_branch, menor_custo)
+            if X_branch is None:
+                continue
+
+            # Atualiza solucao com menor custo
+            menor_custo = C_bb[i][k][i][k] + custo_branch
+            X = np.zeros((n, n))
+            X[i][k] = 1
+            X_aux = [x.item() for x in np.nditer(X_branch)]
+            for ic in i_branch:
+                for kc in k_branch:
+                    X[ic][kc] = X_aux.pop(0)
+
+    return X, menor_custo
+
+def hgb(n, C_bb):
+
+    if n == 1:
+        return [1], C_bb[0][0][0][0]
+
     # (1) Coletando elementos complementares
     C_bb = junta_elementos_complementares(n, C_bb)
 
@@ -45,48 +100,79 @@ def passo_1(n, C_bb):
         for k in range(n):
             C_bb = resolve_lap_submatriz(n, C_bb, i, k)
 
-    return passo_2(n, C_bb, 0)
+    return hgb_passo_2(n, C_bb, 0)
 
 
-def passo_2(n, C_bb, R_linha):
-    C_leader = np.zeros((n, n))
-    for i in range(n):
-        for k in range(n):
-            C_leader[i][k] = C_bb[i][k][i][k]
+def hgb_passo_2(n, C_bb, R_linha):
+    while True:
+        C_leader = np.zeros((n, n))
+        for i in range(n):
+            for k in range(n):
+                C_leader[i][k] = C_bb[i][k][i][k]
 
-    # (2) Hungarian Algorithm na matriz de lideres
-    C_leader, reducao = hungarian(n, C_leader)
-    R_linha += reducao
-    for i in range(n):
-        for k in range(n):
-            C_bb[i][k][i][k] = C_leader[i][k]
+        # (2) Hungarian Algorithm na matriz de lideres
+        C_leader, reducao = hungarian(n, C_leader)
+        R_linha += reducao
+        for i in range(n):
+            for k in range(n):
+                C_bb[i][k][i][k] = C_leader[i][k]
 
-    # (2) Primeiro caso: solução foi encontrada
-    _, num_linhas = hungarian_linhas(n, C_leader)
-    solucao_encontrada = num_linhas >= n
-    X = np.zeros((n, n))
-    js, ps = linear_sum_assignment(C_leader)
-    for x in range(n):
-        if not solucao_encontrada: break
-        for y in range(n):
-            if C_bb[js[x]][ps[x]][js[y]][ps[y]] != 0:
-                solucao_encontrada = False
-                break
-    if solucao_encontrada:
-        for x in range(n):
-            X[js[x]][ps[x]] = 1
-        return X, R_linha
+        # (2) Primeiro caso: solução foi encontrada
+        C_test = np.zeros((n, n))
+        _, num_linhas = hungarian_linhas(n, C_leader)
+        if num_linhas >= n:
+            for i in range(n):
+                for k in range(n):
+                    if C_leader[i][k] == 0:
+                        C_test[i][k] = 1
 
-    # (2) Segundo caso: aumento do R'
-    if reducao > 0:
-        return passo_3(n, C_bb, C_leader, R_linha)
+            # Testa as possiveis solucoes
+            ic = []
+            kc = []
+            while True:
+                size = len(ic) + len(kc)
+                for i in [i for i in range(n) if i not in ic]:
+                    if sum(C_test[i]) == 1:
+                        for k in [k for k in range(n) if k not in kc]:
+                            ic += [i]
+                            kc += [k]
+                for k in [k for k in range(n) if k not in kc]:
+                    if sum(C_test[:][k]) == 1:
+                        for i in [i for i in range(n) if i not in ic]:
+                            ic += [i]
+                            kc += [k]
+                if size == len(ic) + len(kc):
+                    break
 
-    # (2) Terceiro caso: Sem solução. R' é uma borda inferior
-    else:
-        return None, R_linha
+            # Gera matrizes de permutação de possiveis soluções
+            permutacao = [np.array(perm) for perm in permutations(np.identity(n))]
+            for x in range(len(ic)):
+                permutacao = [perm for perm in permutacao if perm[ic[x]][kc[x]] == 1]
+            for X in permutacao:
+                solucao_confirmada = True
+                jc, pc = linear_sum_assignment(X, True)
+                for x in range(n):
+                    for y in range(n):
+                        if C_bb[jc[x]][pc[x]][jc[y]][pc[y]] != 0:
+                            solucao_confirmada = False
+                            break
+                    if not solucao_confirmada: break
+
+                # Solução realmente confirmada!
+                if solucao_confirmada:
+                    return X, R_linha
+
+        # (2) Segundo caso: aumento do R'
+        # Executa proximos passos antes de tentar novamente
+        if reducao > 0:
+            C_bb, R_linha = hgb_passo_3(n, C_bb, C_leader, R_linha)
+
+        # (2) Terceiro caso: Sem solução. R' é uma borda inferior
+        else:
+            return None, R_linha
 
 
-def passo_3(n, C_bb, C_leader, R_linha):
+def hgb_passo_3(n, C_bb, C_leader, R_linha):
     # (3) Se todos os lideres forem zero
     if C_leader.sum() == 0:
         return None, R_linha
@@ -111,10 +197,10 @@ def passo_3(n, C_bb, C_leader, R_linha):
 
     C_bb = junta_elementos_complementares(n, C_bb)
 
-    return passo_4(n, C_bb, C_leader, R_linha)
+    return hgb_passo_4(n, C_bb, C_leader, R_linha)
 
 
-def passo_4(n, C_bb, C_leader, R_linha):
+def hgb_passo_4(n, C_bb, C_leader, R_linha):
     # (4) Roda novamente o algoritmo nas submatrizes cujos lideres foram zero no passo 2
     for i in range(n):
         for k in range(n):
@@ -124,7 +210,7 @@ def passo_4(n, C_bb, C_leader, R_linha):
         for k in range(n):
             if C_leader[i][k] != 0:
                 C_bb = resolve_lap_submatriz(n, C_bb, i, k)
-    return passo_2(n, C_bb, R_linha)
+    return C_bb, R_linha
 
 
 def junta_elementos_complementares(n, C_bb):
@@ -231,7 +317,7 @@ def hungarian(n, C):
                         C_ha[j][p] += menor_nao_marcado
 
     # Calcula custo da solução encontrada
-    js, ps = linear_sum_assignment(C)
+    js, ps = linear_sum_assignment(C_ha)
     menor_custo = 0
     for x in range(n):
         menor_custo += C[js[x]][ps[x]]
@@ -378,3 +464,6 @@ def test_vector():
               [48, 0, 90, 0],
               [8, 0, 15, 0],
               [0, 0, 0, 90]]]]
+
+
+# print(hgb_passo_1(4,test_vector()))

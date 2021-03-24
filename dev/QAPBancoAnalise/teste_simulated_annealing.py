@@ -12,8 +12,8 @@ from Algoritmo.simulated_annealing import simulated_annealing
 # Configurações ###############################################
 
 repeticoes = 4
-min_deps = 2
-max_deps = 7
+min_deps = 4
+max_deps = 4
 funcao = simulated_annealing
 
 # Parte constante #############################################

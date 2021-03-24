@@ -69,6 +69,10 @@ def branch(n, C_bb, menor_custo):
             if menor_custo is not None:
                 if lb > menor_custo:
                     continue
+            menor_custo = C_bb[i][k][i][k] + lb
+            for ic in i_branch:
+                for kc in k_branch:
+                    menor_custo += C_bb[i][k][i][k]
 
             # Branching recursivo
             X_branch, custo_branch = branch(n-1, C_branch, menor_custo)
@@ -76,7 +80,6 @@ def branch(n, C_bb, menor_custo):
                 continue
 
             # Atualiza solucao com menor custo
-            menor_custo = C_bb[i][k][i][k] + custo_branch
             X = np.zeros((n, n))
             X[i][k] = 1
             X_aux = [x.item() for x in np.nditer(X_branch)]

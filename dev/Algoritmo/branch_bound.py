@@ -33,9 +33,8 @@ def branch_bound(n, D, F):
                 for p in range(n):
                     C_bb[i][k][j][p] = int(D[i][j] * F[i][j][k][p] * 1000)
 
-    X, lower_bound = hgb(n, C_bb)
-    if X is None:
-        X, _ = branch(n, C_bb, lower_bound)
+    C_linha, menor_custo = hgb(n, C_bb)
+    X, _ = branch(n, C_linha, menor_custo)
     return X
 
 def branch(n, C_bb, menor_custo):
@@ -50,7 +49,7 @@ def branch(n, C_bb, menor_custo):
     for i in range(n):
         for k in range(n):
 
-            # Formulando custo do problema N-1
+            # Formulando custo do problema N-1 fixando C[i][k][i][k]
             # '-> C do branch = C_branch = C_bb[ic][kc] para ic,kc de 0 a N-1, ic != i, kc != k
             # '-> C_branch[ic][kc] = C[ic][kc][jc][pc] para jc,pc de 0 a N-1, jc != i, pc != k
             # '-> C_branch_final = C_branch[ic][kc][jc][kc] + C_bb[i][k][jc][kc] + C_bb[ic][kc][i][k]
@@ -58,14 +57,14 @@ def branch(n, C_bb, menor_custo):
             k_branch = [kc for kc in range(n) if kc != k]
             j_branch = [jc for jc in range(n) if jc != i]
             p_branch = [pc for pc in range(n) if pc != k]
-            C_branch = [[[[C_bb[ic][kc][jc][pc] + C_bb[ic][kc][i][k] + C_bb[i][k][jc][pc]
+            C_branch = [[[[C_bb[ic][kc][jc][pc] + C_bb[i][k][ic][kc]
                            for pc in p_branch]
                           for jc in j_branch]
                          for kc in k_branch]
                         for ic in i_branch]
 
             # BOUND: Checando bounds do problema
-            _, lb = hgb(n - 1, C_branch)
+            C_branch, lb = hgb(n - 1, C_branch)
 
             if menor_custo is not None:
                 if lb > menor_custo:
@@ -90,7 +89,7 @@ def branch(n, C_bb, menor_custo):
 def hgb(n, C_bb):
 
     if n == 1:
-        return [1], C_bb[0][0][0][0]
+        return C_bb, C_bb[0][0][0][0]
 
     # (1) Coletando elementos complementares
     C_bb = junta_elementos_complementares(n, C_bb)
@@ -160,7 +159,7 @@ def hgb_passo_2(n, C_bb, R_linha):
 
                 # Solução realmente confirmada!
                 if solucao_confirmada:
-                    return X, R_linha
+                    return C_bb, R_linha
 
         # (2) Segundo caso: aumento do R'
         # Executa proximos passos antes de tentar novamente
@@ -169,13 +168,13 @@ def hgb_passo_2(n, C_bb, R_linha):
 
         # (2) Terceiro caso: Sem solução. R' é uma borda inferior
         else:
-            return None, R_linha
+            return C_bb, R_linha
 
 
 def hgb_passo_3(n, C_bb, C_leader, R_linha):
     # (3) Se todos os lideres forem zero
     if C_leader.sum() == 0:
-        return None, R_linha
+        return C_bb, R_linha
 
     # (3) Caso contrário, para cada lider que não seja 0, distribuir uniformimente o valor em sua submatriz
     # Lembrando que os valores precisam ser inteiros

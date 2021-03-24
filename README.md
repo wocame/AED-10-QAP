@@ -1,1 +1,1 @@
-# bruteForce-QAP-
+# EAD_10_QAP

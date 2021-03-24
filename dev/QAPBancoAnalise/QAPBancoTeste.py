@@ -9,6 +9,7 @@ from copy import copy
 class QAPBancoTeste:
     """
     Teste de algoritmo para solucionar :class:`QAPBanco`
+
     :param repeticoes: Número de vezes para executar o algoritmo
     :param __qap: Problema a ser resolvido
     :param __qap_solucionado: Lista do(s) problema(s) solucionado(s)
@@ -19,6 +20,7 @@ class QAPBancoTeste:
     def __init__(self, qap=None, repeticoes=1):
         """
         Método construtor
+
         :param qap: Problema a ser testado
         :param repeticoes: Quantas vezes o problema será testado
         """
@@ -36,6 +38,7 @@ class QAPBancoTeste:
     def definir_problema(self, qap: QAPBanco):
         """
         Define o problema do banco a ser testado
+
         :param qap: Problema do banco
         """
         self.__qap = qap
@@ -43,6 +46,7 @@ class QAPBancoTeste:
     def resgatar_problema(self):
         """
         Retorna o problema do banco definido
+
         :return: Problema do banco
         """
         return self.__qap
@@ -50,6 +54,7 @@ class QAPBancoTeste:
     def num_dependencias_problema(self):
         """
         Retorna o numero de dependencias do problema
+
         :return: Problema do banco
         """
         return self.__qap.num_dependencias()
@@ -57,12 +62,12 @@ class QAPBancoTeste:
     def resolver_problema_com(self, alg):
         """
         Resolve a QAP do banco com o algoritmo especificado
+
         :param alg: Algoritmo a ser testado
             '-> n: Número de dependências
             '-> D: Matriz de custo de deslocamento entre dependências
             '-> F: Matriz de fator de risco
             '-> Retorno: Matriz da solução
-        :type alg: function(int,list,list)->list
         """
 
         # Zerando atributos do teste
@@ -79,6 +84,7 @@ class QAPBancoTeste:
     def problema_resolvido(self):
         """
         Informa a(s) soluçao(ões) do problema
+
         :returns: Problema(s) solucionados
         """
         return self.__qap_solucionado
@@ -86,6 +92,7 @@ class QAPBancoTeste:
     def fator_resolvido(self):
         """
         Informa o(s) fator(es) da solucao do problema
+
         :returns: Fator(es) encontradas
         """
         return [qap.fator_escolha() for qap in self.__qap_solucionado]
@@ -93,6 +100,7 @@ class QAPBancoTeste:
     def rota_resolvido(self):
         """
         Informa a(s) rota(s) da solucao do problema
+
         :returns: Rota(s) encontradas
         """
         return [qap.str_rota_solucao() for qap in self.__qap_solucionado]
@@ -100,6 +108,7 @@ class QAPBancoTeste:
     def tempo_resolvido(self):
         """
         Informa tempo(s) de execução do ultimo teste rodado
+
         :return: Tempo(s) da ultima execução em segundos
         """
         return np.array([qap.tempo_execucao() for qap in self.__qap_solucionado])
@@ -107,6 +116,7 @@ class QAPBancoTeste:
     def tempo_medio(self):
         """
         Informa médio do tempo de execução da ultima rodada
+
         :return: Tempo médio de execução em segundos
         """
         return self.tempo_resolvido().mean()
@@ -114,6 +124,7 @@ class QAPBancoTeste:
     def tempo_desvio(self):
         """
         Desvio padrão do tempo de execução na ultima rodada
+
         :return: Desvio padrão em segundos
         """
         return self.tempo_resolvido().std()

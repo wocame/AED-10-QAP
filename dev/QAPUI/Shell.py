@@ -15,6 +15,9 @@ from copy import copy
 
 
 class Shell:
+    """
+    Inteface de Usuário textual
+    """
 
     def __init__(self):
 
@@ -53,6 +56,9 @@ class Shell:
         }
 
     def iniciar_ui(self):
+        """
+        Inicializa a comunicação via terminal
+        """
         warnings.simplefilter("ignore", UserWarning)
         self.__mostrar_boas_vindas()
         while True:
@@ -307,6 +313,3 @@ class Shell:
             except:
                 print("Entrada inválida! Digite um inteiro.")
 
-
-shell = Shell()
-shell.iniciar_ui()

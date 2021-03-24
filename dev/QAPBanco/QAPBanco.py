@@ -10,6 +10,7 @@ from geopy.distance import geodesic
 class QAPBanco:
     """
     Problema de Assinalamento Quadrático de manutenção de segurança do banco
+
     :param n: Número de dependências do problema
     :param V: Custo médio em reais por quilômetro, defaults to 10
     :param f: Função de fator de risco, defaults to __fator_risco
@@ -25,16 +26,23 @@ class QAPBanco:
     :param __F: Matriz de Fator de Risco com todas as combinações possíveis
     :param __X: Matriz de solução (rota) do problema
     :param __tempo_exec: Tempo de execução em segundos do ultimo algoritmo usado para solucionar o problema
+
     """
 
     def __init__(self, df=None):
         """
         Método construtor
+
         :param df: Informações das dependências, defaults to None
+
             '-> Col 1: Identificador
+
             '-> Col 2: Latitude
+
             '-> Col 3: Longitude
+
             '-> Col 4: Risco
+
         """
 
         # Valores padrão
@@ -61,12 +69,18 @@ class QAPBanco:
     def registrar_dependencias(self, df: pd.DataFrame):
         """
         Registra as informações das dependêcias nessa QAP
+
         :param df: Dataframe com informações das dependências
+
             '-> Col 1: Identificador
+
             '-> Col 2: Latitude
+
             '-> Col 3: Longitude
+
             '-> Col 4: Risco
-        :raises: class:`TypeError`: Dataframe entrada não está no formato correto
+        :raises: :class:`TypeError` Dataframe entrada não está no formato correto
+
         """
 
         # Registrando número de dependências
@@ -86,26 +100,35 @@ class QAPBanco:
     def resgatar_dependencias(self):
         """
         Resgata dados registrados das dependências
-        :returns: Dataframe com informações das dependências
+
+        :returns:Dataframe com informações das dependências
             '-> 'id':    Identificador
+
             '-> 'lat':   Latitude
+
             '-> 'lon':   Longitude
+
             '-> 'risco': Risco
+
         """
         return pd.DataFrame({'id': self.id, 'lat': self.G[:, 0], 'lon': self.G[:, 1], 'risco': self.R})
 
     def num_dependencias(self):
         """
         Informa o número de dependencias do problema resolvido
+
         :returns: Número de dependencias
+
         """
         return self.n
 
     def resolver_com(self, alg):
         """
         Soluciona o problema com o algoritmo fornecido
+
         :param alg: Função que implementa um algoritmo
         :returns: Matriz da rota que soluciona o problema com shape=(n,n) (ou None se não tiver sido solucionada)
+
         """
         inicio = time.process_time()
         self.__X = alg(self.n, self.__D, self.__F)
@@ -114,14 +137,18 @@ class QAPBanco:
     def solucao(self):
         """
         Informa a soluçao do problema
+
         :returns: Matriz da rota que soluciona o problema com shape=(n,n) (ou None se não tiver sido solucionada)
+
         """
         return self.__X
 
     def rota_solucao(self):
         """
         Converte a matriz de solucao em uma array da rota
+
         :returns: Lista dos IDs da rota
+
         """
         rota = []
         if self.__X is not None:
@@ -134,7 +161,9 @@ class QAPBanco:
     def str_rota_solucao(self):
         """
         Converte a matriz de solucao em uma rota mais facil de visualizar
+
         :returns: Rota no formato "Dep1 -> Dep2 -> ... -> DepN -> Dep1"
+
         """
 
         str_rota = "<Não resolvido>"
@@ -148,21 +177,27 @@ class QAPBanco:
     def fator_escolha(self):
         """
         Fator de escolha (custo ponderado com risco) da rota da solução
+
         :returns: Fator de escolha
+
         """
         return QAPBanco.calculo_fator_escolha(self.__n, self.__D, self.__F, self.__X)
 
     def custo_logistica(self):
         """
         Custo da logística da rota da solução
+
         :returns: Custo logístico
+
         """
         return QAPBanco.calculo_custo_logistica(self.__n, self.__D, self.__X)
 
     def tempo_execucao(self):
         """
         Tempo de execução da ultima resolução do problema
+
         :returns: Tempo de execução em segundos
+
         """
         return self.__tempo_exec
 
@@ -170,11 +205,13 @@ class QAPBanco:
     def calculo_fator_escolha(n, D, F, X):
         """
         Fator de escolha (custo ponderado com risco) da rota fornecida
+
         :param n: Número de dependências do problema
         :param D: Matriz de custo de deslocamento com shape=(n,n)
         :param F: Matriz de Fator de Risco com todas as combinações possíveis com shape=(n,n,n,n)
         :param X: Matriz da rota a ser avaliada com shape=(n,n)
         :returns: Fator de escolha
+
         """
         fator_escolha = 0
         for i in range(n):
@@ -188,10 +225,12 @@ class QAPBanco:
     def calculo_custo_logistica(n, D, X):
         """
         Custo da logística da rota fornecida
+
         :param n: Número de dependências do problema
         :param D: Matriz de custo de deslocamento com shape=(n,n)
         :param X: Matriz da rota a ser avaliada com shape=(n,n)
         :returns: Custo logístico
+
         """
         custo_logistica = 0
         for i in range(n):
@@ -205,8 +244,10 @@ class QAPBanco:
     def calculo_solucao_rota(rota=None):
         """
         Converte a array de rota em uma matriz de solucao
+
         :param rota: Array 1-D de rota
         :returns: Matriz de solução
+
         """
 
         n = len(rota)
@@ -221,6 +262,7 @@ class QAPBanco:
     def __calcula_matrizes(self):
         """
         Gera as matrizes necessárias para realização do calculo da solução
+
         """
 
         # Verifica se é realmente necessário recalcular as matrizes
@@ -261,11 +303,13 @@ class QAPBanco:
         Função Fator de Risco padrão.
         Calcula a influencia na escolha do trajeto devido a chance de ataque entre dependências
         em determinadas posições da rota
+
         :param i: indice da dependência de origem
         :param j: indice da dependência de destino
         :param k: posição da rota de origem
         :param p: posição da rota de destino
         :returns: Fator de risco
+
         """
         if p - k == 1:
             return 1 / (self.R[j] * p)

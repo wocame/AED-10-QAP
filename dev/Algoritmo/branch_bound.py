@@ -12,6 +12,7 @@ import numpy as np
 def branch_bound(n, D, F):
     """
     Implementação do Dual-Procedure Branch and Bound
+
     :param n: Número de dependências
     :param D: Matriz de custo de deslocamento entre dependências
     :param F: Matriz de fator de risco
@@ -38,6 +39,14 @@ def branch_bound(n, D, F):
     return X
 
 def branch(n, C_bb, menor_custo):
+    """
+    Função de ramificação do Dual-Procedure Branch and Bound
+
+    :param n: Número de dependências
+    :param C_bb: Matriz de custo N² por N²
+    :param menor_custo: Menor custo encontrado até o momento
+    :return: Matriz de escolha com rota ótima e seu custo
+    """
 
     # Caso especial: final da árvore
     if n == 1:
@@ -90,6 +99,14 @@ def branch(n, C_bb, menor_custo):
     return X, menor_custo
 
 def hgb(n, C_bb):
+    """
+    Primeiro passo do algoritmo de Hahn-Grant Bound para calculo do limite inferior
+    Junta os elementos complementares da matriz e resolve a LAP das submatrizes.
+
+    :param n: Número de dependências
+    :param C_bb: Matriz de custo N² por N²
+    :return: Matriz de custo C' no término do algoritmo :method:hungarian e o limite inferior
+    """
 
     if n == 1:
         return C_bb, C_bb[0][0][0][0]
@@ -106,6 +123,18 @@ def hgb(n, C_bb):
 
 
 def hgb_passo_2(n, C_bb, R_linha):
+    """
+    Segundo passo do algoritmo de Hahn-Grant Bound para calculo do limite inferior.
+    Roda o algoritmo húngaro na matriz de líderes e define o que deve ser feito:
+    * (1) Confere se a solução foi encontrada, returnando ela caso positivo
+    * (2) Se solução não encontrada, confere se teve um aumento de R' e roda o passo 3
+    * (3) Se a solução não foi encontrada e não teve aumento de R', retorna o limite inferior encontrado
+
+    :param n: Número de dependências
+    :param C_bb: Matriz de custo N² por N²
+    :param R_linha: Fator de redução R' (limite inferior) encontrado até o momento
+    :return: Matriz de custo reduzida e o limite inferior
+    """
     while True:
         C_leader = np.zeros((n, n))
         for i in range(n):
@@ -175,6 +204,17 @@ def hgb_passo_2(n, C_bb, R_linha):
 
 
 def hgb_passo_3(n, C_bb, C_leader, R_linha):
+    """
+    Terceiro passo do algoritmo de Hahn-Grant Bound para calculo do limite inferior.
+    Se todos os líderes forem zero, retorna o limite inferior.
+    Caso contrário, redistribui uniformimente o valor dos lideres em suas submatrizes respectivas
+
+    :param n: Número de dependências
+    :param C_bb: Matriz de custo N² por N²
+    :param R_linha: Fator de redução R' (limite inferior) encontrado até o momento
+    :return: Matriz de custo com valor dos lideres e o limite inferior e o limite inferior
+    """
+
     # (3) Se todos os lideres forem zero
     if C_leader.sum() == 0:
         return C_bb, R_linha
@@ -203,6 +243,16 @@ def hgb_passo_3(n, C_bb, C_leader, R_linha):
 
 
 def hgb_passo_4(n, C_bb, C_leader, R_linha):
+    """
+    Quarto passo do algoritmo de Hahn-Grant Bound para calculo do limite inferior.
+    Resolve a LAP das submatrizes, primeiros das que tinham líder zero e depois as demais
+
+    :param n: Número de dependências
+    :param C_bb: Matriz de custo N² por N²
+    :param C_leader: Matriz de custo dos líderes
+    :param R_linha: Fator de redução R' (limite inferior) encontrado até o momento
+    :return: Matriz de custo reduzida e o limite inferior
+    """
     # (4) Roda novamente o algoritmo nas submatrizes cujos lideres foram zero no passo 2
     for i in range(n):
         for k in range(n):
@@ -216,6 +266,13 @@ def hgb_passo_4(n, C_bb, C_leader, R_linha):
 
 
 def junta_elementos_complementares(n, C_bb):
+    """
+    Junta os elementos complementares na matriz de custo
+
+    :param n: Número de dependências
+    :param C_bb: Matriz de custo N² por N²
+    :return: Matriz de custo com os elementos complementares somados e concentrados nos indices superiores
+    """
     for i in range(n):
         for k in range(n):
             j_branch = [jc for jc in range(n) if jc != i]
@@ -230,6 +287,15 @@ def junta_elementos_complementares(n, C_bb):
 
 
 def resolve_lap_submatriz(n, C_bb, i, k):
+    """
+    Resolve o Linear Assignment Problem da submatriz C_bb[i][k]
+
+    :param n: Número de dependências
+    :param C_bb: Matriz de custo N² por N²
+    :param i: Índice da dependência escolhida
+    :param k: Índice da posição em que a dependência escolhida está
+    :return: Matriz de custo reduzida presente no término do algoritmo :method:hungarian
+    """
     j_branch = [jc for jc in range(n) if jc != i]
     p_branch = [pc for pc in range(n) if pc != k]
     C_branch = np.array([[C_bb[i][k][j][p] for p in p_branch] for j in j_branch])
@@ -274,6 +340,13 @@ def resolve_lap_submatriz(n, C_bb, i, k):
 
 
 def hungarian(n, C):
+    """
+    Hungarian Algorithm para resolver LAPs
+
+    :param n: Número de dependências
+    :param C: Matriz de custos
+    :return: Matriz de custo reduzida e custo encontrado
+    """
     C_ha = np.array(copy(C))
 
     # Para cada linha, subtrai todos os elementos pelo menos valor
@@ -329,6 +402,13 @@ def hungarian(n, C):
 
 
 def hungarian_linhas(n, C_ha):
+    """
+    Traça as linhas de zeros para resolução do algoritmo hungaro
+
+    :param n: Número de dependências
+    :param C_ha: Matriz de custos sendo editado pelo algoritmo hungaro
+    :return: Matriz de linhas de zeros e número de linhas
+    """
     # Assinala zeros
     assinala_zero = np.array([[None] * n for x in range(n)])
     for j in range(n):
@@ -387,6 +467,13 @@ def hungarian_linhas(n, C_ha):
 
 
 def test_vector():
+    """
+    Vetor de testes do artigo usado de base pro desenvolvimento do HGB
+
+    '-> HAHN, P.; GRANT, T.; Lower Bounds For The Quadratic Assignment Problem Based Upon A Dual Formulation
+
+    :return: Vetor de teste com 4 dependências
+    """
     return [[[[105, 0, 0, 0],
               [0, 60, 120, 30],
               [0, 70, 140, 35],

@@ -1,0 +1,312 @@
+
+<!DOCTYPE html>
+
+<html lang="pt_BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>branch_bound &#8212; documentação AED_10_QAP </title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Buscar" href="search.html" />
+    <link rel="next" title="simulated_annealing" href="simulated_annealing.html" />
+    <link rel="prev" title="forca_bruta" href="forca_bruta.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-Algoritmo.branch_bound">
+<span id="branch-bound"></span><h1>branch_bound<a class="headerlink" href="#module-Algoritmo.branch_bound" title="Link permanente para este título">¶</a></h1>
+<dl class="py function">
+<dt id="Algoritmo.branch_bound.branch">
+<code class="sig-prename descclassname"><span class="pre">Algoritmo.branch_bound.</span></code><code class="sig-name descname"><span class="pre">branch</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_bb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">menor_custo</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.branch_bound.branch" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Função de ramificação do Dual-Procedure Branch and Bound</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Número de dependências</p></li>
+<li><p><strong>C_bb</strong> – Matriz de custo N² por N²</p></li>
+<li><p><strong>menor_custo</strong> – Menor custo encontrado até o momento</p></li>
+</ul>
+</dd>
+<dt class="field-even">Retorna</dt>
+<dd class="field-even"><p>Matriz de escolha com rota ótima e seu custo</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Algoritmo.branch_bound.branch_bound">
+<code class="sig-prename descclassname"><span class="pre">Algoritmo.branch_bound.</span></code><code class="sig-name descname"><span class="pre">branch_bound</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.branch_bound.branch_bound" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Implementação do Dual-Procedure Branch and Bound</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Número de dependências</p></li>
+<li><p><strong>D</strong> – Matriz de custo de deslocamento entre dependências</p></li>
+<li><p><strong>F</strong> – Matriz de fator de risco</p></li>
+</ul>
+</dd>
+<dt class="field-even">Retorna</dt>
+<dd class="field-even"><p>Matriz de escolha com rota ótima</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Algoritmo.branch_bound.hgb">
+<code class="sig-prename descclassname"><span class="pre">Algoritmo.branch_bound.</span></code><code class="sig-name descname"><span class="pre">hgb</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_bb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.branch_bound.hgb" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Primeiro passo do algoritmo de Hahn-Grant Bound para calculo do limite inferior
+Junta os elementos complementares da matriz e resolve a LAP das submatrizes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Número de dependências</p></li>
+<li><p><strong>C_bb</strong> – Matriz de custo N² por N²</p></li>
+</ul>
+</dd>
+<dt class="field-even">Retorna</dt>
+<dd class="field-even"><p>Matriz de custo C’ no término do algoritmo :method:hungarian e o limite inferior</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Algoritmo.branch_bound.hgb_passo_2">
+<code class="sig-prename descclassname"><span class="pre">Algoritmo.branch_bound.</span></code><code class="sig-name descname"><span class="pre">hgb_passo_2</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_bb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R_linha</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.branch_bound.hgb_passo_2" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Segundo passo do algoritmo de Hahn-Grant Bound para calculo do limite inferior.
+Roda o algoritmo húngaro na matriz de líderes e define o que deve ser feito:
+* (1) Confere se a solução foi encontrada, returnando ela caso positivo
+* (2) Se solução não encontrada, confere se teve um aumento de R’ e roda o passo 3
+* (3) Se a solução não foi encontrada e não teve aumento de R’, retorna o limite inferior encontrado</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Número de dependências</p></li>
+<li><p><strong>C_bb</strong> – Matriz de custo N² por N²</p></li>
+<li><p><strong>R_linha</strong> – Fator de redução R’ (limite inferior) encontrado até o momento</p></li>
+</ul>
+</dd>
+<dt class="field-even">Retorna</dt>
+<dd class="field-even"><p>Matriz de custo reduzida e o limite inferior</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Algoritmo.branch_bound.hgb_passo_3">
+<code class="sig-prename descclassname"><span class="pre">Algoritmo.branch_bound.</span></code><code class="sig-name descname"><span class="pre">hgb_passo_3</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_bb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_leader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R_linha</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.branch_bound.hgb_passo_3" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Terceiro passo do algoritmo de Hahn-Grant Bound para calculo do limite inferior.
+Se todos os líderes forem zero, retorna o limite inferior.
+Caso contrário, redistribui uniformimente o valor dos lideres em suas submatrizes respectivas</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Número de dependências</p></li>
+<li><p><strong>C_bb</strong> – Matriz de custo N² por N²</p></li>
+<li><p><strong>R_linha</strong> – Fator de redução R’ (limite inferior) encontrado até o momento</p></li>
+</ul>
+</dd>
+<dt class="field-even">Retorna</dt>
+<dd class="field-even"><p>Matriz de custo com valor dos lideres e o limite inferior e o limite inferior</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Algoritmo.branch_bound.hgb_passo_4">
+<code class="sig-prename descclassname"><span class="pre">Algoritmo.branch_bound.</span></code><code class="sig-name descname"><span class="pre">hgb_passo_4</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_bb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_leader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">R_linha</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.branch_bound.hgb_passo_4" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Quarto passo do algoritmo de Hahn-Grant Bound para calculo do limite inferior.
+Resolve a LAP das submatrizes, primeiros das que tinham líder zero e depois as demais</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Número de dependências</p></li>
+<li><p><strong>C_bb</strong> – Matriz de custo N² por N²</p></li>
+<li><p><strong>C_leader</strong> – Matriz de custo dos líderes</p></li>
+<li><p><strong>R_linha</strong> – Fator de redução R’ (limite inferior) encontrado até o momento</p></li>
+</ul>
+</dd>
+<dt class="field-even">Retorna</dt>
+<dd class="field-even"><p>Matriz de custo reduzida e o limite inferior</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Algoritmo.branch_bound.hungarian">
+<code class="sig-prename descclassname"><span class="pre">Algoritmo.branch_bound.</span></code><code class="sig-name descname"><span class="pre">hungarian</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.branch_bound.hungarian" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Hungarian Algorithm para resolver LAPs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Número de dependências</p></li>
+<li><p><strong>C</strong> – Matriz de custos</p></li>
+</ul>
+</dd>
+<dt class="field-even">Retorna</dt>
+<dd class="field-even"><p>Matriz de custo reduzida e custo encontrado</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Algoritmo.branch_bound.hungarian_linhas">
+<code class="sig-prename descclassname"><span class="pre">Algoritmo.branch_bound.</span></code><code class="sig-name descname"><span class="pre">hungarian_linhas</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_ha</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.branch_bound.hungarian_linhas" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Traça as linhas de zeros para resolução do algoritmo hungaro</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Número de dependências</p></li>
+<li><p><strong>C_ha</strong> – Matriz de custos sendo editado pelo algoritmo hungaro</p></li>
+</ul>
+</dd>
+<dt class="field-even">Retorna</dt>
+<dd class="field-even"><p>Matriz de linhas de zeros e número de linhas</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Algoritmo.branch_bound.junta_elementos_complementares">
+<code class="sig-prename descclassname"><span class="pre">Algoritmo.branch_bound.</span></code><code class="sig-name descname"><span class="pre">junta_elementos_complementares</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_bb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.branch_bound.junta_elementos_complementares" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Junta os elementos complementares na matriz de custo</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Número de dependências</p></li>
+<li><p><strong>C_bb</strong> – Matriz de custo N² por N²</p></li>
+</ul>
+</dd>
+<dt class="field-even">Retorna</dt>
+<dd class="field-even"><p>Matriz de custo com os elementos complementares somados e concentrados nos indices superiores</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Algoritmo.branch_bound.resolve_lap_submatriz">
+<code class="sig-prename descclassname"><span class="pre">Algoritmo.branch_bound.</span></code><code class="sig-name descname"><span class="pre">resolve_lap_submatriz</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_bb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.branch_bound.resolve_lap_submatriz" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Resolve o Linear Assignment Problem da submatriz C_bb[i][k]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Número de dependências</p></li>
+<li><p><strong>C_bb</strong> – Matriz de custo N² por N²</p></li>
+<li><p><strong>i</strong> – Índice da dependência escolhida</p></li>
+<li><p><strong>k</strong> – Índice da posição em que a dependência escolhida está</p></li>
+</ul>
+</dd>
+<dt class="field-even">Retorna</dt>
+<dd class="field-even"><p>Matriz de custo reduzida presente no término do algoritmo :method:hungarian</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Algoritmo.branch_bound.test_vector">
+<code class="sig-prename descclassname"><span class="pre">Algoritmo.branch_bound.</span></code><code class="sig-name descname"><span class="pre">test_vector</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.branch_bound.test_vector" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Vetor de testes do artigo usado de base pro desenvolvimento do HGB</p>
+<p>‘-&gt; HAHN, P.; GRANT, T.; Lower Bounds For The Quadratic Assignment Problem Based Upon A Dual Formulation</p>
+<dl class="field-list simple">
+<dt class="field-odd">Retorna</dt>
+<dd class="field-odd"><p>Vetor de teste com 4 dependências</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">AED_10_QAP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navegação</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="QAPBanco.html">QAPBanco</a></li>
+<li class="toctree-l1"><a class="reference internal" href="QAPBancoTeste.html">QAPBancoTeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="QAPBancoSuite.html">QAPBancoSuite</a></li>
+<li class="toctree-l1"><a class="reference internal" href="forca_bruta.html">forca_bruta</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">branch_bound</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulated_annealing.html">simulated_annealing</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="forca_bruta.html" title="capítulo anterior">forca_bruta</a></li>
+      <li>Next: <a href="simulated_annealing.html" title="próximo capítulo">simulated_annealing</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Busca rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Tiago Vidigal.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/branch_bound.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('../dev'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'QAPBanco'
+project = 'AED_10_QAP'
 copyright = '2021, Tiago Vidigal'
 author = 'Tiago Vidigal'
 

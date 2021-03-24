@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+
+<html lang="pt_BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QAPBancoSuite &#8212; documentação AED_10_QAP </title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Buscar" href="search.html" />
+    <link rel="prev" title="QAPBancoTeste" href="QAPBancoTeste.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-QAPBancoAnalise.QAPBancoSuite">
+<span id="qapbancosuite"></span><h1>QAPBancoSuite<a class="headerlink" href="#module-QAPBancoAnalise.QAPBancoSuite" title="Link permanente para este título">¶</a></h1>
+<dl class="py class">
+<dt id="QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">QAPBancoAnalise.QAPBancoSuite.</span></code><code class="sig-name descname"><span class="pre">QAPBancoSuite</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">testes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Suite de testes de problemas do banco</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>__alg</strong> – Algoritmo usado pelos testes</p></li>
+<li><p><strong>__testes</strong> – Testes a serem rodados</p></li>
+<li><p><strong>__testes_executados</strong> – Testes que foram rodados</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.dados_tempo_execucao">
+<code class="sig-name descname"><span class="pre">dados_tempo_execucao</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.dados_tempo_execucao" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Gera dados relacionados ao tempo de execução dos testes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Retorna</dt>
+<dd class="field-odd"><p>Dataframe com número de dependencias, média e desvio</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.definir_algoritmo">
+<code class="sig-name descname"><span class="pre">definir_algoritmo</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.definir_algoritmo" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Define algoritmo para executar os testes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><p><strong>alg</strong> – Algoritmo</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.definir_testes">
+<code class="sig-name descname"><span class="pre">definir_testes</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">testes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.definir_testes" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Define testes a serem executados</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><p><strong>testes</strong> – Lista de testes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.grafico_tempo_execucao">
+<code class="sig-name descname"><span class="pre">grafico_tempo_execucao</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.grafico_tempo_execucao" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Gera gráfico com dados relacionados ao tempo de execução dos testes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Retorna</dt>
+<dd class="field-odd"><p>Gráfico pyplot dos dados de tempo de execução</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.resgatar_algoritmo">
+<code class="sig-name descname"><span class="pre">resgatar_algoritmo</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.resgatar_algoritmo" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Recupera algoritmo para executar os testes</p>
+<dl class="field-list simple">
+<dt class="field-odd">Retorna</dt>
+<dd class="field-odd"><p>Algoritmo</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.resgatar_testes">
+<code class="sig-name descname"><span class="pre">resgatar_testes</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.resgatar_testes" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Recupera testes definidos</p>
+<dl class="field-list simple">
+<dt class="field-odd">Retorna</dt>
+<dd class="field-odd"><p>Lista de testes</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.rodar_testes">
+<code class="sig-name descname"><span class="pre">rodar_testes</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.rodar_testes" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Executa os testes definidos</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.testes_executados">
+<code class="sig-name descname"><span class="pre">testes_executados</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QAPBancoAnalise.QAPBancoSuite.QAPBancoSuite.testes_executados" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Resgata testes que foram executados</p>
+<dl class="field-list simple">
+<dt class="field-odd">Retorna</dt>
+<dd class="field-odd"><p>Lista de testes</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">AED_10_QAP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navegação</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="QAPBanco.html">QAPBanco</a></li>
+<li class="toctree-l1"><a class="reference internal" href="QAPBancoTeste.html">QAPBancoTeste</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">QAPBancoSuite</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="QAPBancoTeste.html" title="capítulo anterior">QAPBancoTeste</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Busca rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Tiago Vidigal.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/QAPBancoSuite.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

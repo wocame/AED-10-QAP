@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+
+<html lang="pt_BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QAPBanco &#8212; documentação AED_10_QAP </title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Buscar" href="search.html" />
+    <link rel="prev" title="A APLICAÇÃO E ANÁLISE DE ALGORITMOS PARA O PROBLEMA DE LOGÍSTICA, ATENDENDO REQUISITOS DE RISCO OPERACIONAL, NUM BANCO PÚBLICO BRASILEIRO COM O USO DE ATRIBUIÇÃO QUADRÁTICA" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-QAPBanco.QAPBanco">
+<span id="qapbanco"></span><h1>QAPBanco<a class="headerlink" href="#module-QAPBanco.QAPBanco" title="Link permanente para este título">¶</a></h1>
+<dl class="py class">
+<dt id="QAPBanco.QAPBanco.QAPBanco">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">QAPBanco.QAPBanco.</span></code><code class="sig-name descname"><span class="pre">QAPBanco</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#QAPBanco.QAPBanco.QAPBanco" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Problema de Assinalamento Quadrático de manutenção de segurança do banco</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Número de dependências do problema</p></li>
+<li><p><strong>V</strong> – Custo médio em reais por quilômetro, defaults to 10</p></li>
+<li><p><strong>f</strong> – Função de fator de risco, defaults to __fator_risco</p></li>
+<li><p><strong>id</strong> – Identificação das dependências com shape=(n,)</p></li>
+<li><p><strong>G</strong> – Matriz de coordenadas geográficas das entidades com shape=(n,)</p></li>
+<li><p><strong>R</strong> – Matriz de Risco das entidades com shape=(n,)</p></li>
+<li><p><strong>__n</strong> – Valor do atributo n usado no calculo das matrizes __D e __F</p></li>
+<li><p><strong>__V</strong> – Valor do atributo V usado no calculo das matrizes __D e __F</p></li>
+<li><p><strong>__f</strong> – Função f usada no calculo das matrizes __D e __F</p></li>
+<li><p><strong>__G</strong> – Valor do atributo G usado no calculo das matrizes __D e __F</p></li>
+<li><p><strong>__R</strong> – Valor do atributo R usado no calculo das matrizes __D e __F</p></li>
+<li><p><strong>__D</strong> – Matriz de Custo de Deslocamento entre entidades</p></li>
+<li><p><strong>__F</strong> – Matriz de Fator de Risco com todas as combinações possíveis</p></li>
+<li><p><strong>__X</strong> – Matriz de solução (rota) do problema</p></li>
+<li><p><strong>__tempo_exec</strong> – Tempo de execução em segundos do ultimo algoritmo usado para solucionar o problema</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="QAPBanco.QAPBanco.QAPBanco.calculo_custo_logistica">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">calculo_custo_logistica</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#QAPBanco.QAPBanco.QAPBanco.calculo_custo_logistica" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Custo da logística da rota fornecida</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Número de dependências do problema</p></li>
+<li><p><strong>D</strong> – Matriz de custo de deslocamento com shape=(n,n)</p></li>
+<li><p><strong>X</strong> – Matriz da rota a ser avaliada com shape=(n,n)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Retorna</dt>
+<dd class="field-even"><p>Custo logístico</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBanco.QAPBanco.QAPBanco.calculo_fator_escolha">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">calculo_fator_escolha</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#QAPBanco.QAPBanco.QAPBanco.calculo_fator_escolha" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Fator de escolha (custo ponderado com risco) da rota fornecida</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Número de dependências do problema</p></li>
+<li><p><strong>D</strong> – Matriz de custo de deslocamento com shape=(n,n)</p></li>
+<li><p><strong>F</strong> – Matriz de Fator de Risco com todas as combinações possíveis com shape=(n,n,n,n)</p></li>
+<li><p><strong>X</strong> – Matriz da rota a ser avaliada com shape=(n,n)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Retorna</dt>
+<dd class="field-even"><p>Fator de escolha</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBanco.QAPBanco.QAPBanco.calculo_solucao_rota">
+<em class="property"><span class="pre">static</span> </em><code class="sig-name descname"><span class="pre">calculo_solucao_rota</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rota</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#QAPBanco.QAPBanco.QAPBanco.calculo_solucao_rota" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Converte a array de rota em uma matriz de solucao</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><p><strong>rota</strong> – Array 1-D de rota</p>
+</dd>
+<dt class="field-even">Retorna</dt>
+<dd class="field-even"><p>Matriz de solução</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBanco.QAPBanco.QAPBanco.custo_logistica">
+<code class="sig-name descname"><span class="pre">custo_logistica</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QAPBanco.QAPBanco.QAPBanco.custo_logistica" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Custo da logística da rota da solução</p>
+<dl class="field-list simple">
+<dt class="field-odd">Retorna</dt>
+<dd class="field-odd"><p>Custo logístico</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBanco.QAPBanco.QAPBanco.fator_escolha">
+<code class="sig-name descname"><span class="pre">fator_escolha</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QAPBanco.QAPBanco.QAPBanco.fator_escolha" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Fator de escolha (custo ponderado com risco) da rota da solução</p>
+<dl class="field-list simple">
+<dt class="field-odd">Retorna</dt>
+<dd class="field-odd"><p>Fator de escolha</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBanco.QAPBanco.QAPBanco.num_dependencias">
+<code class="sig-name descname"><span class="pre">num_dependencias</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QAPBanco.QAPBanco.QAPBanco.num_dependencias" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Informa o número de dependencias do problema resolvido</p>
+<dl class="field-list simple">
+<dt class="field-odd">Retorna</dt>
+<dd class="field-odd"><p>Número de dependencias</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBanco.QAPBanco.QAPBanco.registrar_dependencias">
+<code class="sig-name descname"><span class="pre">registrar_dependencias</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">pandas.core.frame.DataFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#QAPBanco.QAPBanco.QAPBanco.registrar_dependencias" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Registra as informações das dependêcias nessa QAP</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><p><strong>df</strong> – <p>Dataframe com informações das dependências</p>
+<p>’-&gt; Col 1: Identificador</p>
+<p>’-&gt; Col 2: Latitude</p>
+<p>’-&gt; Col 3: Longitude</p>
+<p>’-&gt; Col 4: Risco</p>
+</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code> Dataframe entrada não está no formato correto</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBanco.QAPBanco.QAPBanco.resgatar_dependencias">
+<code class="sig-name descname"><span class="pre">resgatar_dependencias</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QAPBanco.QAPBanco.QAPBanco.resgatar_dependencias" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Resgata dados registrados das dependências</p>
+<dl>
+<dt>:returns:Dataframe com informações das dependências</dt><dd><p>‘-&gt; ‘id’:    Identificador</p>
+<p>‘-&gt; ‘lat’:   Latitude</p>
+<p>‘-&gt; ‘lon’:   Longitude</p>
+<p>‘-&gt; ‘risco’: Risco</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBanco.QAPBanco.QAPBanco.resolver_com">
+<code class="sig-name descname"><span class="pre">resolver_com</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#QAPBanco.QAPBanco.QAPBanco.resolver_com" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Soluciona o problema com o algoritmo fornecido</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><p><strong>alg</strong> – Função que implementa um algoritmo</p>
+</dd>
+<dt class="field-even">Retorna</dt>
+<dd class="field-even"><p>Matriz da rota que soluciona o problema com shape=(n,n) (ou None se não tiver sido solucionada)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBanco.QAPBanco.QAPBanco.rota_solucao">
+<code class="sig-name descname"><span class="pre">rota_solucao</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QAPBanco.QAPBanco.QAPBanco.rota_solucao" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Converte a matriz de solucao em uma array da rota</p>
+<dl class="field-list simple">
+<dt class="field-odd">Retorna</dt>
+<dd class="field-odd"><p>Lista dos IDs da rota</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBanco.QAPBanco.QAPBanco.solucao">
+<code class="sig-name descname"><span class="pre">solucao</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QAPBanco.QAPBanco.QAPBanco.solucao" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Informa a soluçao do problema</p>
+<dl class="field-list simple">
+<dt class="field-odd">Retorna</dt>
+<dd class="field-odd"><p>Matriz da rota que soluciona o problema com shape=(n,n) (ou None se não tiver sido solucionada)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBanco.QAPBanco.QAPBanco.str_rota_solucao">
+<code class="sig-name descname"><span class="pre">str_rota_solucao</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QAPBanco.QAPBanco.QAPBanco.str_rota_solucao" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Converte a matriz de solucao em uma rota mais facil de visualizar</p>
+<dl class="field-list simple">
+<dt class="field-odd">Retorna</dt>
+<dd class="field-odd"><p>Rota no formato “Dep1 -&gt; Dep2 -&gt; … -&gt; DepN -&gt; Dep1”</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="QAPBanco.QAPBanco.QAPBanco.tempo_execucao">
+<code class="sig-name descname"><span class="pre">tempo_execucao</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#QAPBanco.QAPBanco.QAPBanco.tempo_execucao" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Tempo de execução da ultima resolução do problema</p>
+<dl class="field-list simple">
+<dt class="field-odd">Retorna</dt>
+<dd class="field-odd"><p>Tempo de execução em segundos</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">AED_10_QAP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navegação</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">QAPBanco</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="capítulo anterior">A APLICAÇÃO E ANÁLISE DE ALGORITMOS PARA O PROBLEMA DE LOGÍSTICA, ATENDENDO REQUISITOS DE RISCO OPERACIONAL, NUM BANCO PÚBLICO BRASILEIRO COM O USO DE ATRIBUIÇÃO QUADRÁTICA</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Busca rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Tiago Vidigal.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/QAPBanco.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

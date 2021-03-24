@@ -9,6 +9,7 @@ from itertools import permutations
 def forca_bruta(n, D, F):
     """
     Algoritmo Força Bruta para calcular QAP do banco
+
     :param n: Número de dependências
     :param D: Matriz de custo de deslocamento entre dependências
     :param F: Matriz de fator de risco

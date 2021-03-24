@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+
+<html lang="pt_BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>simulated_annealing &#8212; documentação AED_10_QAP </title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Buscar" href="search.html" />
+    <link rel="prev" title="branch_bound" href="branch_bound.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-Algoritmo.simulated_annealing">
+<span id="simulated-annealing"></span><h1>simulated_annealing<a class="headerlink" href="#module-Algoritmo.simulated_annealing" title="Link permanente para este título">¶</a></h1>
+<dl class="py class">
+<dt id="Algoritmo.simulated_annealing.QAPSA">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">Algoritmo.simulated_annealing.</span></code><code class="sig-name descname"><span class="pre">QAPSA</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.simulated_annealing.QAPSA" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Extensão da classe Annealer do ‘perrygeo/simanneal’ para resolver a QAP com o Classical Simulated Annealing</p>
+<dl class="py method">
+<dt id="Algoritmo.simulated_annealing.QAPSA.energy">
+<code class="sig-name descname"><span class="pre">energy</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.simulated_annealing.QAPSA.energy" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Função objetivo</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Algoritmo.simulated_annealing.QAPSA.move">
+<code class="sig-name descname"><span class="pre">move</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.simulated_annealing.QAPSA.move" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Seleção de vizinho</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="Algoritmo.simulated_annealing.QAPSA.update">
+<code class="sig-name descname"><span class="pre">update</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.simulated_annealing.QAPSA.update" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Não mostrar updates</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="Algoritmo.simulated_annealing.simulated_annealing">
+<code class="sig-prename descclassname"><span class="pre">Algoritmo.simulated_annealing.</span></code><code class="sig-name descname"><span class="pre">simulated_annealing</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Algoritmo.simulated_annealing.simulated_annealing" title="Link permanente para esta definição">¶</a></dt>
+<dd><p>Algoritmo Simulated Annealing para calcular QAP do banco</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parâmetros</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> – Número de dependências</p></li>
+<li><p><strong>D</strong> – Matriz de custo de deslocamento entre dependências</p></li>
+<li><p><strong>F</strong> – Matriz de fator de risco</p></li>
+</ul>
+</dd>
+<dt class="field-even">Retorna</dt>
+<dd class="field-even"><p>Matriz de escolha com rota ótima</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p>Aviso:</p>
+<p>Foi utilizado o pacote “simanneal” disponível em:
+<a class="reference external" href="https://github.com/perrygeo/simanneal">https://github.com/perrygeo/simanneal</a></p>
+<p>Segue a licença:</p>
+<p>Copyright (c) 2009, Richard J. Wagner &lt;<a class="reference external" href="mailto:wagnerr&#37;&#52;&#48;umich&#46;edu">wagnerr<span>&#64;</span>umich<span>&#46;</span>edu</a>&gt;
+Copyright (c) 2014, Matthew T. Perry &lt;<a class="reference external" href="mailto:perrygeo&#37;&#52;&#48;gmail&#46;com">perrygeo<span>&#64;</span>gmail<span>&#46;</span>com</a>&gt;</p>
+<p>Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS” AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</p>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">AED_10_QAP</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navegação</h3>
+<p class="caption"><span class="caption-text">Modelos:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="QAPBanco.html">QAPBanco</a></li>
+<li class="toctree-l1"><a class="reference internal" href="QAPBancoTeste.html">QAPBancoTeste</a></li>
+<li class="toctree-l1"><a class="reference internal" href="QAPBancoSuite.html">QAPBancoSuite</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Algoritmos:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="forca_bruta.html">forca_bruta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="branch_bound.html">branch_bound</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">simulated_annealing</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="branch_bound.html" title="capítulo anterior">branch_bound</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Busca rápida</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Ir" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Tiago Vidigal.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/simulated_annealing.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

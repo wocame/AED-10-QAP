@@ -29,6 +29,7 @@ class Shell:
         self.__repeticoes = 0
         self.__num_dependencias_min = 2
         self.__num_dependencias_max = 2
+        self.__nao_compara = [branch_bound]
 
         # Opcoes
         self.__op_janelas = {
@@ -215,9 +216,12 @@ class Shell:
         df_desvio = pd.DataFrame({'n': range(self.__num_dependencias_min, self.__num_dependencias_max + 1)})
         df_rota = pd.DataFrame({'qap': range(self.__repeticoes * (self.__num_dependencias_max - self.__num_dependencias_min + 1))})
         df_fator = pd.DataFrame({'qap': range(self.__repeticoes * (self.__num_dependencias_max - self.__num_dependencias_min + 1))})
-        solucoes = {}
         for alg in self.__op_algoritmos:
             self.__alg = self.__op_algoritmos[alg][1]
+            if self.__alg in self.__nao_compara:
+                print("")
+                print(f"Não comparando '{self.__alg.__name__}'")
+                continue
             if self.__alg is not None:
                 print("")
                 print(f"Usando '{self.__alg.__name__}'", end="")
@@ -230,6 +234,9 @@ class Shell:
                 df_media.rename(columns={'media':self.__alg.__name__}, inplace=True)
                 df_desvio = df_desvio.merge(self.__suite.dados_tempo_execucao()[['n', 'desvio']], on='n')
                 df_desvio.rename(columns={'desvio':self.__alg.__name__}, inplace=True)
+                plot = self.__suite.grafico_tempo_execucao()
+                plt.savefig("../../resultados/analise_" + self.__alg.__name__ + ".png")
+                plt.close()
         print("")
         print("Rotas")
         print(df_rota)
